@@ -210,26 +210,29 @@ DEFAULT_FROM_EMAIL = os.getenv(
     "",
 ).strip()
 
-# Use Resend in production when its API key is configured.
-# Keep Gmail SMTP available for local development otherwise.
-if RESEND_API_KEY:
-    EMAIL_BACKEND = (
-        "community.services.resend_backend.ResendEmailBackend"
-    )
-else:
-    EMAIL_BACKEND = (
-        "django.core.mail.backends.smtp.EmailBackend"
-    )
+# =========================================================
+# EMAIL CONFIGURATION
+# =========================================================
 
-    EMAIL_HOST = "smtp.gmail.com"
-    EMAIL_PORT = 587
-    EMAIL_USE_TLS = True
-    EMAIL_USE_SSL = False
+GOOGLE_APPS_SCRIPT_EMAIL_URL = os.getenv(
+    "GOOGLE_APPS_SCRIPT_EMAIL_URL", ""
+).strip()
 
-    EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-    EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+GOOGLE_APPS_SCRIPT_EMAIL_SECRET = os.getenv(
+    "GOOGLE_APPS_SCRIPT_EMAIL_SECRET", ""
+).strip()
 
-    EMAIL_TIMEOUT = 20
+DEFAULT_FROM_EMAIL = os.getenv(
+    "DEFAULT_FROM_EMAIL",
+    "subhamthakur050503@gmail.com",
+).strip()
+
+EMAIL_BACKEND = (
+    "community.services.google_apps_script_backend."
+    "GoogleAppsScriptEmailBackend"
+)
+
+EMAIL_TIMEOUT = 30
 
 # =========================================================
 # WEBSITE URL

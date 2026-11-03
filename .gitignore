@@ -26,3 +26,6 @@ staticfiles/
 # OS
 .DS_Store
 Thumbs.db
+# Google OAuth credentials
+credentials.json
+token.json
