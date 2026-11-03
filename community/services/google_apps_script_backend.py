@@ -71,14 +71,18 @@ class GoogleAppsScriptEmailBackend(BaseEmailBackend):
                         )
 
                     if not result.get("success"):
-                        raise RuntimeError("Email service rejected the request.")
+                        service_error = result.get("error", "Unknown Google Apps Script error")
+
+                        raise RuntimeError(
+                            f"Google Apps Script rejected the request: {service_error}"
+                        )
 
                 sent_count += 1
 
             except Exception as error:
                 logger.error(
                     "Google Apps Script email failed: %s",
-                    type(error).__name__,
+                    str(error)[:500],
                 )
 
                 if not self.fail_silently:
