@@ -203,23 +203,33 @@ STORAGES = {
 # EMAIL CONFIGURATION
 # =========================================================
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
-
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+RESEND_API_KEY = os.getenv("RESEND_API_KEY", "").strip()
 
 DEFAULT_FROM_EMAIL = os.getenv(
     "DEFAULT_FROM_EMAIL",
-    EMAIL_HOST_USER,
-)
+    "",
+).strip()
 
-EMAIL_TIMEOUT = 20
+# Use Resend in production when its API key is configured.
+# Keep Gmail SMTP available for local development otherwise.
+if RESEND_API_KEY:
+    EMAIL_BACKEND = (
+        "community.services.resend_backend.ResendEmailBackend"
+    )
+else:
+    EMAIL_BACKEND = (
+        "django.core.mail.backends.smtp.EmailBackend"
+    )
 
+    EMAIL_HOST = "smtp.gmail.com"
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_USE_SSL = False
+
+    EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+    EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
+    EMAIL_TIMEOUT = 20
 
 # =========================================================
 # WEBSITE URL
