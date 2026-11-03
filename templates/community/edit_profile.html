@@ -1,0 +1,331 @@
+{% extends "community/auth/base.html" %}
+
+{% block title %}Edit Profile | NetVibe DevConnect{% endblock %}
+
+{% block auth_content %}
+
+<style>
+    .edit-profile-page {
+        width: 100%;
+        max-width: 760px;
+        margin: 0 auto;
+        color: var(--text-color, #1e293b);
+    }
+
+    .edit-profile-card {
+        padding: clamp(20px, 5vw, 36px);
+        border: 1px solid var(--border-color, #e2e8f0);
+        border-radius: 24px;
+        background: var(--card-bg, #ffffff);
+        box-shadow: 0 15px 45px rgba(15, 23, 42, .08);
+    }
+
+    .edit-profile-heading {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 10px;
+    }
+
+    .edit-profile-icon {
+        width: 55px;
+        height: 55px;
+        flex-shrink: 0;
+        display: grid;
+        place-items: center;
+        border-radius: 17px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: #fff;
+        font-size: 1.5rem;
+    }
+
+    .edit-profile-heading h1 {
+        margin: 0;
+        font-size: clamp(1.4rem, 4vw, 1.9rem);
+        font-weight: 800;
+    }
+
+    .edit-profile-subtitle {
+        margin: 0 0 28px;
+        color: var(--muted-color, #64748b);
+        line-height: 1.7;
+    }
+
+    .edit-section-title {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin: 26px 0 17px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--border-color, #e2e8f0);
+        font-size: 1rem;
+        font-weight: 800;
+    }
+
+    .edit-section-title i {
+        color: #6366f1;
+        font-size: 1.15rem;
+    }
+
+    .edit-field {
+        margin-bottom: 19px;
+    }
+
+    .edit-field label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 700;
+        font-size: .92rem;
+    }
+
+    .edit-field .form-control {
+        min-height: 47px;
+        border: 1px solid var(--border-color, #cbd5e1);
+        border-radius: 12px;
+        background: var(--input-bg, #fff);
+        color: var(--text-color, #1e293b);
+        box-shadow: none;
+    }
+
+    .edit-field .form-control:focus {
+        border-color: #818cf8;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, .12);
+    }
+
+    .edit-field textarea.form-control {
+        min-height: 125px;
+        resize: vertical;
+    }
+
+    .edit-help {
+        display: block;
+        margin-top: 7px;
+        color: var(--muted-color, #64748b);
+        font-size: .82rem;
+        line-height: 1.6;
+    }
+
+    .edit-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 28px;
+    }
+
+    .edit-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        min-height: 47px;
+        padding: 11px 19px;
+        border: none;
+        border-radius: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: transform .2s, box-shadow .2s;
+    }
+
+    .edit-button-primary {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+    }
+
+    .edit-button-primary:hover {
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(99, 102, 241, .25);
+    }
+
+    .edit-button-secondary {
+        border: 1px solid var(--border-color, #e2e8f0);
+        background: transparent;
+        color: var(--text-color, #334155);
+    }
+
+    .edit-button-secondary:hover {
+        background: rgba(148, 163, 184, .1);
+        color: var(--text-color, #334155);
+    }
+
+    @media (max-width: 520px) {
+        .edit-actions {
+            flex-direction: column;
+        }
+
+        .edit-button {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="edit-profile-page">
+
+    <div class="edit-profile-card">
+
+        <div class="edit-profile-heading">
+            <div class="edit-profile-icon">
+                <i class="bi bi-person-gear"></i>
+            </div>
+
+            <div>
+                <h1>Edit Your Profile</h1>
+                <div class="text-muted small mt-1">
+                    Make your developer profile stand out.
+                </div>
+            </div>
+        </div>
+
+        <p class="edit-profile-subtitle">
+            Share your background, technical skills, and professional links
+            with the NetVibe DevConnect community.
+        </p>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success rounded-3" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" action="{% url 'edit_profile' %}">
+            {% csrf_token %}
+
+            <h2 class="edit-section-title">
+                <i class="bi bi-person-circle"></i>
+                Personal Information
+            </h2>
+
+            <div class="edit-field">
+                <label for="profile_picture">Profile Picture URL</label>
+                <input
+                    type="url"
+                    name="profile_picture"
+                    id="profile_picture"
+                    class="form-control"
+                    placeholder="https://example.com/profile.jpg"
+                    value="{{ profile.profile_picture }}"
+                >
+                <small class="edit-help">
+                    Optional. Enter a publicly accessible image URL.
+                </small>
+            </div>
+
+            <div class="edit-field">
+                <label for="bio">About Me</label>
+                <textarea
+                    name="bio"
+                    id="bio"
+                    class="form-control"
+                    maxlength="500"
+                    placeholder="Tell us about yourself, your interests, and your developer journey..."
+                >{{ profile.bio }}</textarea>
+                <small class="edit-help">
+                    Maximum 500 characters.
+                </small>
+            </div>
+
+            <div class="edit-field">
+                <label for="location">Location</label>
+                <input
+                    type="text"
+                    name="location"
+                    id="location"
+                    class="form-control"
+                    maxlength="100"
+                    placeholder="e.g. Kolkata, India"
+                    value="{{ profile.location }}"
+                >
+            </div>
+
+            <h2 class="edit-section-title">
+                <i class="bi bi-code-slash"></i>
+                Technical Skills
+            </h2>
+
+            <div class="edit-field">
+                <label for="skills">Your Skills</label>
+                <input
+                    type="text"
+                    name="skills"
+                    id="skills"
+                    class="form-control"
+                    maxlength="300"
+                    placeholder="Python, Django, HTML, CSS, JavaScript"
+                    value="{{ profile.skills }}"
+                >
+                <small class="edit-help">
+                    Separate each skill with a comma.
+                </small>
+            </div>
+
+            <h2 class="edit-section-title">
+                <i class="bi bi-link-45deg"></i>
+                Professional Links
+            </h2>
+
+            <div class="edit-field">
+                <label for="github_url">
+                    <i class="bi bi-github me-1"></i> GitHub URL
+                </label>
+                <input
+                    type="url"
+                    name="github_url"
+                    id="github_url"
+                    class="form-control"
+                    placeholder="https://github.com/yourusername"
+                    value="{{ profile.github_url }}"
+                >
+            </div>
+
+            <div class="edit-field">
+                <label for="linkedin_url">
+                    <i class="bi bi-linkedin me-1"></i> LinkedIn URL
+                </label>
+                <input
+                    type="url"
+                    name="linkedin_url"
+                    id="linkedin_url"
+                    class="form-control"
+                    placeholder="https://www.linkedin.com/in/yourusername"
+                    value="{{ profile.linkedin_url }}"
+                >
+            </div>
+
+            <div class="edit-field">
+                <label for="portfolio_url">
+                    <i class="bi bi-globe2 me-1"></i> Portfolio Website
+                </label>
+                <input
+                    type="url"
+                    name="portfolio_url"
+                    id="portfolio_url"
+                    class="form-control"
+                    placeholder="https://yourportfolio.com"
+                    value="{{ profile.portfolio_url }}"
+                >
+            </div>
+
+            <div class="edit-actions">
+                <button type="submit" class="edit-button edit-button-primary">
+                    <i class="bi bi-check-circle"></i>
+                    Save Changes
+                </button>
+
+                <a
+                    href="{% url 'my_profile' %}"
+                    class="edit-button edit-button-secondary"
+                >
+                    <i class="bi bi-arrow-left"></i>
+                    Back to Profile
+                </a>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

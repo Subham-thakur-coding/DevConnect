@@ -1,0 +1,177 @@
+
+<footer class="site-footer">
+    <div class="container">
+
+        <div class="footer-main">
+            <div class="row g-4">
+
+                <!-- Brand Information -->
+                <div class="col-lg-5 col-md-6">
+
+                    <a
+                        class="footer-brand"
+                        href="{% url 'home' %}"
+                    >
+                        <span class="brand-icon">
+                            <i class="bi bi-code-slash"></i>
+                        </span>
+
+                        <span>
+                            <span class="brand-highlight">DevConnect</span>
+                            <small class="footer-brand-subtitle">
+                                by NetVibe
+                            </small>
+                        </span>
+                    </a>
+
+                    <p class="footer-description mt-3">
+                        A developer community built around collaboration,
+                        creativity, and continuous learning.
+                    </p>
+
+                    <div class="footer-social-links">
+                        <a
+                            href="{% url 'developer_directory' %}"
+                            aria-label="Discover developers"
+                            title="Discover developers"
+                        >
+                            <i class="bi bi-people-fill"></i>
+                        </a>
+
+                        <a
+                            href="{% url 'home' %}#projects"
+                            aria-label="Explore projects"
+                            title="Explore projects"
+                        >
+                            <i class="bi bi-code-square"></i>
+                        </a>
+
+                        <a
+                            href="{% url 'home' %}#features"
+                            aria-label="Explore features"
+                            title="Explore features"
+                        >
+                            <i class="bi bi-stars"></i>
+                        </a>
+                    </div>
+
+                </div>
+
+                <!-- Explore -->
+                <div class="col-6 col-lg-2 col-md-3">
+
+                    <h3 class="footer-heading">Explore</h3>
+
+                    <ul class="footer-links">
+                        <li>
+                            <a href="{% url 'home' %}">
+                                Home
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{% url 'developer_directory' %}">
+                                Developers
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{% url 'home' %}#projects">
+                                Projects
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{% url 'home' %}#features">
+                                Features
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+
+                <!-- Your Account -->
+                <div class="col-6 col-lg-2 col-md-3">
+
+                    <h3 class="footer-heading">Your Account</h3>
+
+                    <ul class="footer-links">
+
+                        {% if request.user.is_authenticated %}
+
+                            <li>
+                                <a href="{% url 'my_profile' %}">
+                                    My Profile
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'edit_profile' %}">
+                                    Edit Profile
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'my_connections' %}">
+                                    Connections
+                                </a>
+                            </li>
+
+                        {% else %}
+
+                            <li>
+                                <a href="{% url 'auth:login' %}">
+                                    Sign In
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'auth:register' %}">
+                                    Join DevConnect
+                                </a>
+                            </li>
+
+                        {% endif %}
+
+                    </ul>
+
+                </div>
+
+                <!-- Mission -->
+                <div class="col-lg-3 col-md-12">
+
+                    <h3 class="footer-heading">Our Mission</h3>
+
+                    <p class="footer-mission">
+                        Learn together.<br>
+                        Build together.<br>
+                        Grow together.
+                    </p>
+
+                    <span class="footer-tagline">
+                        <i class="bi bi-heart-fill me-1"></i>
+                        Built for developers
+                    </span>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+
+            <p class="mb-0">
+                &copy; {% now "Y" %} DevConnect by NetVibe.
+                All rights reserved.
+            </p>
+
+            <a href="{% url 'home' %}#home" class="back-to-top">
+                Back to top
+                <i class="bi bi-arrow-up"></i>
+            </a>
+
+        </div>
+
+    </div>
+</footer>

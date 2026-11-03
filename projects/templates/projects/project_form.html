@@ -1,0 +1,316 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_title }} | DevConnect{% endblock %}
+
+{% block extra_css %}
+<style>
+.project-form-page {
+    padding: 40px 0 70px;
+}
+
+.project-form-card {
+    max-width: 850px;
+    margin: auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.project-form-header {
+    padding: 30px;
+    background: var(--gradient);
+    color: white;
+}
+
+.project-form-header h1 {
+    font-weight: 800;
+    font-size: clamp(1.5rem, 4vw, 2.1rem);
+    margin-bottom: 8px;
+}
+
+.project-form-header p {
+    margin: 0;
+    color: rgba(255,255,255,.85);
+}
+
+.project-form-body {
+    padding: clamp(20px, 4vw, 35px);
+}
+
+.project-form-body label {
+    color: var(--text);
+    font-weight: 650;
+    margin-bottom: 8px;
+}
+
+.project-form-body .form-control,
+.project-form-body .form-select {
+    background: var(--surface-soft);
+    color: var(--text);
+    border: 1px solid var(--border);
+    min-height: 46px;
+}
+
+.project-form-body textarea.form-control {
+    min-height: 140px;
+}
+
+.project-form-body .form-control:focus,
+.project-form-body .form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 .2rem rgba(99,102,241,.15);
+}
+
+.project-form-body .form-check-input {
+    background-color: var(--surface-soft);
+    border-color: var(--border);
+}
+
+.project-form-body .form-check-input:checked {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.form-help {
+    color: var(--muted);
+    font-size: .8rem;
+    margin-top: 6px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 25px;
+}
+
+.form-submit {
+    border: 0;
+    border-radius: 11px;
+    padding: 12px 22px;
+    background: var(--gradient);
+    color: white;
+    font-weight: 700;
+}
+
+.form-submit:hover {
+    opacity: .92;
+}
+
+.field-errors {
+    color: #ef4444;
+    font-size: .83rem;
+    margin-top: 6px;
+}
+
+@media(max-width:575px) {
+    .project-form-page {
+        padding: 22px 0 45px;
+    }
+
+    .project-form-card {
+        border-radius: 17px;
+    }
+
+    .project-form-header {
+        padding: 23px;
+    }
+
+    .form-actions > * {
+        width: 100%;
+    }
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<section class="project-form-page">
+    <div class="container">
+
+        <div class="project-form-card">
+
+            <div class="project-form-header">
+                <h1>
+                    <i class="bi bi-rocket-takeoff me-2"></i>
+                    {{ page_title }}
+                </h1>
+
+                <p>
+                    Share your idea, showcase your skills and find
+                    developers who want to build with you.
+                </p>
+            </div>
+
+            <div class="project-form-body">
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    <div class="mb-4">
+                        <label for="{{ form.title.id_for_label }}">
+                            {{ form.title.label }}
+                        </label>
+
+                        {{ form.title }}
+
+                        {% for error in form.title.errors %}
+                            <div class="field-errors">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="{{ form.tagline.id_for_label }}">
+                            {{ form.tagline.label }}
+                        </label>
+
+                        {{ form.tagline }}
+
+                        {% for error in form.tagline.errors %}
+                            <div class="field-errors">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="{{ form.description.id_for_label }}">
+                            {{ form.description.label }}
+                        </label>
+
+                        {{ form.description }}
+
+                        <div class="form-help">
+                            Explain what your project does, its purpose
+                            and what you want to achieve.
+                        </div>
+
+                        {% for error in form.description.errors %}
+                            <div class="field-errors">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+                            <label for="{{ form.category.id_for_label }}">
+                                {{ form.category.label }}
+                            </label>
+
+                            {{ form.category }}
+
+                            {% for error in form.category.errors %}
+                                <div class="field-errors">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="{{ form.status.id_for_label }}">
+                                {{ form.status.label }}
+                            </label>
+
+                            {{ form.status }}
+
+                            {% for error in form.status.errors %}
+                                <div class="field-errors">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-12">
+                            <label for="{{ form.required_skills.id_for_label }}">
+                                {{ form.required_skills.label }}
+                            </label>
+
+                            {{ form.required_skills }}
+
+                            <div class="form-help">
+                                Separate skills with commas.
+                            </div>
+
+                            {% for error in form.required_skills.errors %}
+                                <div class="field-errors">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="{{ form.repository_url.id_for_label }}">
+                                {{ form.repository_url.label }}
+                            </label>
+
+                            {{ form.repository_url }}
+
+                            {% for error in form.repository_url.errors %}
+                                <div class="field-errors">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="{{ form.demo_url.id_for_label }}">
+                                {{ form.demo_url.label }}
+                            </label>
+
+                            {{ form.demo_url }}
+
+                            {% for error in form.demo_url.errors %}
+                                <div class="field-errors">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="{{ form.visibility.id_for_label }}">
+                                {{ form.visibility.label }}
+                            </label>
+
+                            {{ form.visibility }}
+
+                            {% for error in form.visibility.errors %}
+                                <div class="field-errors">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-check mt-2">
+                                {{ form.looking_for_members }}
+
+                                <label class="form-check-label"
+                                       for="{{ form.looking_for_members.id_for_label }}">
+                                    {{ form.looking_for_members.label }}
+                                </label>
+                            </div>
+
+                            {% for error in form.looking_for_members.errors %}
+                                <div class="field-errors">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="{% url 'projects:list' %}"
+                           class="btn btn-outline-secondary rounded-3 px-4 py-2">
+                            Cancel
+                        </a>
+
+                        <button type="submit" class="form-submit">
+                            <i class="bi bi-check-circle me-1"></i>
+                            {{ submit_label }}
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

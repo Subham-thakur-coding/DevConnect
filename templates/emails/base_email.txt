@@ -1,0 +1,15 @@
+DevConnect
+Connect. Collaborate. Build Together.
+
+{% block email_content %}
+{% endblock %}
+
+Thank you for being part of DevConnect.
+
+{% if site_url %}
+Visit DevConnect: {{ site_url }}
+{% endif %}
+
+© {% now "Y" %} DevConnect. All rights reserved.
+
+This is an automated email. Please do not reply directly.

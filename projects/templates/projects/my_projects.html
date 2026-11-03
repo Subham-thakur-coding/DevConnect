@@ -1,0 +1,667 @@
+{% extends "base.html" %}
+
+{% block title %}My Projects | DevConnect{% endblock %}
+
+{% block meta_description %}
+Manage your projects, joined projects and incoming collaboration requests.
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .my-projects-page {
+        color: var(--text);
+        padding-bottom: 35px;
+    }
+
+    .mp-hero {
+        position: relative;
+        overflow: hidden;
+        padding: 30px;
+        margin-bottom: 28px;
+        border-radius: 22px;
+        background: linear-gradient(120deg, #6366f1, #8b5cf6);
+        color: #fff;
+        box-shadow: 0 12px 30px rgba(99, 102, 241, .20);
+    }
+
+    .mp-hero::after {
+        content: "";
+        position: absolute;
+        width: 220px;
+        height: 220px;
+        right: -65px;
+        top: -100px;
+        border: 35px solid rgba(255,255,255,.10);
+        border-radius: 50%;
+    }
+
+    .mp-hero-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .mp-hero h1 {
+        font-size: clamp(1.5rem, 4vw, 2rem);
+        font-weight: 800;
+        margin-bottom: 8px;
+    }
+
+    .mp-hero p {
+        margin-bottom: 0;
+        color: rgba(255,255,255,.85);
+    }
+
+    .mp-hero .btn {
+        border-radius: 12px;
+        padding: 10px 17px;
+        font-weight: 700;
+    }
+
+    .mp-section {
+        margin-bottom: 32px;
+    }
+
+    .mp-section-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 17px;
+    }
+
+    .mp-section-title {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        font-size: 1.15rem;
+        font-weight: 800;
+        margin: 0;
+    }
+
+    .mp-heading-icon {
+        width: 39px;
+        height: 39px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        color: #fff;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        font-size: 1.1rem;
+    }
+
+    .mp-count {
+        padding: 5px 11px;
+        border-radius: 30px;
+        background: var(--surface-soft);
+        border: 1px solid var(--border);
+        color: var(--muted);
+        font-size: .8rem;
+        font-weight: 700;
+    }
+
+    .mp-card {
+        height: 100%;
+        padding: 21px;
+        border: 1px solid var(--border);
+        border-radius: 17px;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .mp-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-hover);
+    }
+
+    .mp-card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 13px;
+    }
+
+    .mp-category {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 8px;
+        color: #6366f1;
+        background: rgba(99, 102, 241, .11);
+        font-size: .75rem;
+        font-weight: 700;
+    }
+
+    .mp-status {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 30px;
+        font-size: .72rem;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .mp-status.idea {
+        background: rgba(245, 158, 11, .13);
+        color: #d97706;
+    }
+
+    .mp-status.building {
+        background: rgba(59, 130, 246, .13);
+        color: #3b82f6;
+    }
+
+    .mp-status.launched {
+        background: rgba(16, 185, 129, .13);
+        color: #10b981;
+    }
+
+    .mp-status.paused {
+        background: rgba(148, 163, 184, .17);
+        color: var(--muted);
+    }
+
+    .mp-card h3 {
+        font-size: 1.08rem;
+        font-weight: 800;
+        margin-bottom: 8px;
+        overflow-wrap: anywhere;
+    }
+
+    .mp-card h3 a {
+        color: var(--text);
+        text-decoration: none;
+    }
+
+    .mp-card h3 a:hover {
+        color: #818cf8;
+    }
+
+    .mp-description {
+        color: var(--muted);
+        font-size: .88rem;
+        line-height: 1.6;
+        margin-bottom: 16px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .mp-skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 17px;
+    }
+
+    .mp-skill {
+        padding: 5px 9px;
+        border-radius: 7px;
+        background: var(--surface-soft);
+        border: 1px solid var(--border);
+        color: var(--muted);
+        font-size: .73rem;
+    }
+
+    .mp-card-footer {
+        padding-top: 13px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        color: var(--muted);
+        font-size: .8rem;
+    }
+
+    .mp-view-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        text-decoration: none;
+        color: #818cf8;
+        font-weight: 700;
+    }
+
+    .mp-view-btn:hover {
+        color: #a5b4fc;
+    }
+
+    .mp-request-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 17px;
+        margin-bottom: 12px;
+        border: 1px solid var(--border);
+        border-radius: 15px;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+    }
+
+    .mp-request-info {
+        min-width: 0;
+    }
+
+    .mp-request-info h4 {
+        font-size: .98rem;
+        font-weight: 800;
+        margin-bottom: 5px;
+        overflow-wrap: anywhere;
+    }
+
+    .mp-request-info p {
+        color: var(--muted);
+        font-size: .84rem;
+        margin-bottom: 5px;
+    }
+
+    .mp-request-message {
+        font-size: .83rem;
+        color: var(--text);
+        margin-top: 8px;
+        overflow-wrap: anywhere;
+    }
+
+    .mp-request-actions {
+        flex-shrink: 0;
+    }
+
+    .mp-empty {
+        padding: 35px 20px;
+        text-align: center;
+        border: 1px dashed var(--border);
+        border-radius: 17px;
+        background: var(--surface);
+    }
+
+    .mp-empty i {
+        font-size: 2.3rem;
+        color: #818cf8;
+        display: block;
+        margin-bottom: 12px;
+    }
+
+    .mp-empty h4 {
+        font-size: 1rem;
+        font-weight: 800;
+        margin-bottom: 7px;
+    }
+
+    .mp-empty p {
+        color: var(--muted);
+        font-size: .87rem;
+        margin-bottom: 15px;
+    }
+
+    .mp-primary-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 9px 15px;
+        border: 0;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: .85rem;
+    }
+
+    .mp-primary-btn:hover {
+        color: #fff;
+        opacity: .9;
+    }
+
+    @media (max-width: 576px) {
+        .mp-hero {
+            padding: 23px 19px;
+        }
+
+        .mp-hero .btn {
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .mp-section-heading {
+            align-items: flex-start;
+        }
+
+        .mp-request-card {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .mp-request-actions {
+            width: 100%;
+        }
+
+        .mp-request-actions .btn {
+            width: 100%;
+        }
+
+        .mp-card {
+            padding: 17px;
+        }
+    }
+
+
+        .mp-request-actions form {
+        display: inline-flex;
+    }
+
+    @media (max-width: 576px) {
+        .mp-request-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .mp-request-actions form {
+            width: 100%;
+        }
+
+        .mp-request-actions form button,
+        .mp-request-actions > a {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid my-projects-page">
+
+    <!-- HERO -->
+    <section class="mp-hero">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mp-hero-content">
+                <h1><i class="bi bi-kanban-fill me-2"></i>My Projects</h1>
+                <p>
+                    Manage your projects, collaborate with developers
+                    and track your development journey.
+                </p>
+            </div>
+
+            <div class="col-lg-4 text-lg-end mp-hero-content">
+                <a href="{% url 'projects:create' %}"
+                   class="btn btn-light">
+                    <i class="bi bi-plus-lg me-1"></i>
+                    Create New Project
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- OWNED PROJECTS -->
+    <section class="mp-section">
+
+        <div class="mp-section-heading">
+            <h2 class="mp-section-title">
+                <span class="mp-heading-icon">
+                    <i class="bi bi-folder-fill"></i>
+                </span>
+                Projects Created by Me
+            </h2>
+
+            <span class="mp-count">
+                {{ owned_projects|length }} Projects
+            </span>
+        </div>
+
+        {% if owned_projects %}
+            <div class="row g-3">
+
+                {% for project in owned_projects %}
+                    <div class="col-12 col-md-6 col-xl-4">
+
+                        <article class="mp-card">
+
+                            <div class="mp-card-top">
+                                <span class="mp-category">
+                                    {{ project.get_category_display }}
+                                </span>
+
+                                <span class="mp-status {{ project.status }}">
+                                    {{ project.get_status_display }}
+                                </span>
+                            </div>
+
+                            <h3>
+                                <a href="{% url 'projects:detail' project.slug %}">
+                                    {{ project.title }}
+                                </a>
+                            </h3>
+
+                            {% if project.tagline %}
+                                <p class="mp-description">
+                                    {{ project.tagline }}
+                                </p>
+                            {% else %}
+                                <p class="mp-description">
+                                    {{ project.description }}
+                                </p>
+                            {% endif %}
+
+                            <div class="mp-skills">
+                                {% for skill in project.skill_list %}
+                                    <span class="mp-skill">{{ skill }}</span>
+                                {% empty %}
+                                    <span class="mp-skill">No skills specified</span>
+                                {% endfor %}
+                            </div>
+
+                            <div class="mp-card-footer">
+                                <span>
+                                    <i class="bi bi-people me-1"></i>
+                                    {{ project.accepted_member_count }} Members
+                                </span>
+
+                                <a href="{% url 'projects:detail' project.slug %}"
+                                   class="mp-view-btn">
+                                    View Project
+                                    <i class="bi bi-arrow-right"></i>
+                                </a>
+                            </div>
+
+                        </article>
+
+                    </div>
+                {% endfor %}
+
+            </div>
+        {% else %}
+            <div class="mp-empty">
+                <i class="bi bi-folder-plus"></i>
+                <h4>You haven't created any projects yet.</h4>
+                <p>Start your journey by publishing your first project.</p>
+
+                <a href="{% url 'projects:create' %}" class="mp-primary-btn">
+                    <i class="bi bi-plus-lg"></i>
+                    Create Your First Project
+                </a>
+            </div>
+        {% endif %}
+
+    </section>
+
+
+    <!-- JOINED PROJECTS -->
+    <section class="mp-section">
+
+        <div class="mp-section-heading">
+            <h2 class="mp-section-title">
+                <span class="mp-heading-icon">
+                    <i class="bi bi-people-fill"></i>
+                </span>
+                Projects I've Joined
+            </h2>
+
+            <span class="mp-count">
+                {{ memberships|length }} Projects
+            </span>
+        </div>
+
+        {% if memberships %}
+            <div class="row g-3">
+
+                {% for membership in memberships %}
+                    <div class="col-12 col-md-6 col-xl-4">
+
+                        <article class="mp-card">
+
+                            <div class="mp-card-top">
+                                <span class="mp-category">
+                                    {{ membership.project.get_category_display }}
+                                </span>
+
+                                <span class="mp-status {{ membership.project.status }}">
+                                    {{ membership.project.get_status_display }}
+                                </span>
+                            </div>
+
+                            <h3>
+                                <a href="{% url 'projects:detail' membership.project.slug %}">
+                                    {{ membership.project.title }}
+                                </a>
+                            </h3>
+
+                            <p class="mp-description">
+                                {{ membership.project.tagline|default:membership.project.description }}
+                            </p>
+
+                            <div class="mp-card-footer">
+                                <span>
+                                    <i class="bi bi-person-circle me-1"></i>
+                                    {{ membership.project.owner.username }}
+                                </span>
+
+                                <a href="{% url 'projects:detail' membership.project.slug %}"
+                                   class="mp-view-btn">
+                                    View Project
+                                    <i class="bi bi-arrow-right"></i>
+                                </a>
+                            </div>
+
+                        </article>
+
+                    </div>
+                {% endfor %}
+
+            </div>
+        {% else %}
+            <div class="mp-empty">
+                <i class="bi bi-people"></i>
+                <h4>You haven't joined any projects yet.</h4>
+                <p>Explore public projects and find developers to collaborate with.</p>
+
+                <a href="{% url 'projects:list' %}" class="mp-primary-btn">
+                    <i class="bi bi-search"></i>
+                    Explore Projects
+                </a>
+            </div>
+        {% endif %}
+
+    </section>
+
+
+    <!-- PENDING JOIN REQUESTS -->
+    <section class="mp-section">
+
+        <div class="mp-section-heading">
+            <h2 class="mp-section-title">
+                <span class="mp-heading-icon">
+                    <i class="bi bi-person-plus-fill"></i>
+                </span>
+                Incoming Join Requests
+            </h2>
+
+            <span class="mp-count">
+                {{ pending_requests|length }} Pending
+            </span>
+        </div>
+
+        {% if pending_requests %}
+
+            {% for request in pending_requests %}
+
+                <div class="mp-request-card">
+
+                    <div class="mp-request-info">
+                        <h4>
+                            {{ request.user.username }}
+                            wants to join
+                            {{ request.project.title }}
+                        </h4>
+
+                        <p>
+                            <i class="bi bi-clock me-1"></i>
+                            Requested {{ request.created_at|date:"M d, Y" }}
+                        </p>
+
+                        {% if request.message %}
+                            <div class="mp-request-message">
+                                <strong>Message:</strong>
+                                {{ request.message }}
+                            </div>
+                        {% else %}
+                            <div class="mp-request-message">
+                                No additional message was provided.
+                            </div>
+                        {% endif %}
+                            </div>
+
+        <div class="mp-request-actions d-flex flex-wrap gap-2">
+
+            <form method="post"
+                action="{% url 'projects:accept_request' request.id %}">
+                {% csrf_token %}
+
+                <button type="submit"
+                        class="btn btn-success btn-sm">
+                    <i class="bi bi-check-circle me-1"></i>
+                    Accept
+                </button>
+            </form>
+
+            <form method="post"
+                action="{% url 'projects:reject_request' request.id %}"
+                onsubmit="return confirm('Are you sure you want to reject this request?');">
+                {% csrf_token %}
+
+                <button type="submit"
+                        class="btn btn-outline-danger btn-sm">
+                    <i class="bi bi-x-circle me-1"></i>
+                    Reject
+                </button>
+            </form>
+
+            <a href="{% url 'projects:detail' request.project.slug %}"
+            class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-eye me-1"></i>
+                View Project
+            </a>
+
+        </div>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+            <div class="mp-empty">
+                <i class="bi bi-inbox"></i>
+                <h4>No pending requests.</h4>
+                <p>When developers request to join your projects, they will appear here.</p>
+            </div>
+        {% endif %}
+
+    </section>
+
+</div>
+{% endblock %}

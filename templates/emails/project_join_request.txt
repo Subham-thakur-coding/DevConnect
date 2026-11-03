@@ -1,0 +1,14 @@
+Hello {{ owner_username }},
+
+{{ applicant_username }} wants to join your project:
+
+{{ project_title }}
+
+Review the request from your My Projects page:
+
+{{ management_url }}
+
+You can accept or reject the request.
+
+Regards,
+The DevConnect Team

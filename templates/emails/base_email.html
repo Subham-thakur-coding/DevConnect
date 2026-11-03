@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ site_name }}</title>
+</head>
+
+<body style="margin:0; padding:0; background-color:#f3f4f6; font-family:Arial,Helvetica,sans-serif; color:#1f2937;">
+
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f3f4f6; padding:35px 12px;">
+        <tr>
+            <td align="center">
+
+                <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px; width:100%; background-color:#ffffff; border-radius:16px; overflow:hidden;">
+
+                    <!-- Header -->
+                    <tr>
+                        <td style="padding:30px 25px; text-align:center; background:linear-gradient(135deg,#6366f1,#8b5cf6);">
+                            <h1 style="margin:0; color:#ffffff; font-size:28px; font-weight:700;">
+                                DevConnect
+                            </h1>
+                            <p style="margin:8px 0 0; color:#ede9fe; font-size:13px;">
+                                Connect. Collaborate. Build Together.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Main Content -->
+                    <tr>
+                        <td style="padding:35px 30px; font-size:15px; line-height:1.7;">
+
+                            {% block email_content %}
+                            {% endblock %}
+
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding:24px 25px; text-align:center; background-color:#f9fafb; border-top:1px solid #e5e7eb;">
+
+                            <p style="margin:0 0 8px; color:#6b7280; font-size:13px;">
+                                Thank you for being part of DevConnect.
+                            </p>
+
+                            {% if site_url %}
+                            <p style="margin:0 0 12px;">
+                                <a href="{{ site_url }}" style="color:#6366f1; font-size:13px; text-decoration:none;">
+                                    Visit DevConnect
+                                </a>
+                            </p>
+                            {% endif %}
+
+                            <p style="margin:0; color:#9ca3af; font-size:11px;">
+                                © {% now "Y" %} DevConnect. All rights reserved.
+                            </p>
+
+                            <p style="margin:8px 0 0; color:#9ca3af; font-size:11px;">
+                                This is an automated email. Please do not reply directly.
+                            </p>
+
+                        </td>
+                    </tr>
+
+                </table>
+
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>

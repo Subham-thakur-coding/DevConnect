@@ -1,0 +1,15 @@
+Hello {{ sender_username }},
+
+Great news!
+
+{{ receiver_username }} has accepted your connection request.
+
+You are now connected on DevConnect.
+
+Visit their developer profile:
+
+{{ profile_url }}
+
+Happy connecting!
+
+The DevConnect Team

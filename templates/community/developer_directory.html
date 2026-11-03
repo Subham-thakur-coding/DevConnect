@@ -1,0 +1,1011 @@
+﻿{% extends "base.html" %}
+
+{% block title %}Developer Directory | DevConnect{% endblock %}
+
+{% block meta_description %}
+Discover developers, explore skills, and connect with the DevConnect community.
+{% endblock %}
+
+
+{% block extra_css %}
+<style>
+/* =========================================================
+   DEVCONNECT DEVELOPER DIRECTORY
+   Responsive | Light Mode | Dark Mode
+   ========================================================= */
+
+.directory-page {
+    color: var(--text);
+    padding-bottom: 60px;
+}
+
+/* =========================================================
+   DIRECTORY HERO
+   ========================================================= */
+
+.directory-header {
+    position: relative;
+    overflow: hidden;
+    padding: 75px 20px 55px;
+    background:
+        radial-gradient(circle at 10% 20%, rgba(99,102,241,.13), transparent 35%),
+        radial-gradient(circle at 90% 80%, rgba(139,92,246,.13), transparent 35%),
+        var(--page-bg);
+    border-bottom: 1px solid var(--border);
+}
+
+.directory-header::before {
+    content: "";
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    right: -100px;
+    top: -130px;
+    border: 35px solid rgba(99,102,241,.07);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.directory-header .container {
+    position: relative;
+    z-index: 1;
+}
+
+.directory-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 1px solid rgba(99,102,241,.2);
+    border-radius: 30px;
+    background: rgba(99,102,241,.09);
+    color: #818cf8;
+    font-size: .76rem;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+}
+
+.directory-title {
+    color: var(--text);
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 850;
+    line-height: 1.2;
+    letter-spacing: -1.5px;
+    margin-top: 22px;
+}
+
+.directory-title .gradient-text {
+    background: linear-gradient(120deg, #6366f1, #a78bfa);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.directory-description {
+    max-width: 620px;
+    margin: 16px auto 0;
+    color: var(--muted);
+    font-size: .98rem;
+    line-height: 1.8;
+}
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+.directory-search {
+    max-width: 680px;
+    margin: 32px auto 0;
+}
+
+.directory-search .input-group {
+    padding: 6px;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.directory-search .input-group:focus-within {
+    border-color: #818cf8;
+    box-shadow: 0 0 0 4px rgba(99,102,241,.12);
+}
+
+.directory-search .form-control {
+    min-height: 49px;
+    padding: 10px 15px;
+    border: 0 !important;
+    border-radius: 10px !important;
+    background: transparent !important;
+    color: var(--text) !important;
+    box-shadow: none !important;
+    font-size: .92rem;
+}
+
+.directory-search .form-control::placeholder {
+    color: var(--muted);
+    opacity: .8;
+}
+
+.directory-search .form-control:focus {
+    background: transparent !important;
+    color: var(--text) !important;
+}
+
+.directory-search .btn {
+    min-height: 47px;
+    padding: 0 23px;
+    border: 0;
+    border-radius: 10px !important;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* =========================================================
+   DIRECTORY CONTENT
+   ========================================================= */
+
+.directory-content {
+    padding: 45px 0 30px;
+}
+
+.directory-section-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 5px;
+}
+
+.directory-heading-icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #fff;
+    font-size: 19px;
+}
+
+.directory-section-title {
+    margin: 0;
+    color: var(--text);
+    font-size: 1.2rem;
+    font-weight: 800;
+}
+
+.directory-section-subtitle {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: .84rem;
+}
+
+.directory-result-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 14px;
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    background: var(--surface);
+    color: var(--text);
+    font-size: .82rem;
+    font-weight: 750;
+    white-space: nowrap;
+}
+
+.directory-result-count i {
+    color: #818cf8;
+}
+
+/* =========================================================
+   DEVELOPER CARDS
+   ========================================================= */
+
+.developer-result-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 0;
+    padding: 23px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 19px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+
+.developer-result-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6);
+    opacity: 0;
+    transition: opacity .25s ease;
+}
+
+.developer-result-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(139,92,246,.4);
+    box-shadow: var(--shadow-hover);
+}
+
+.developer-result-card:hover::before {
+    opacity: 1;
+}
+
+.developer-card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+    margin-bottom: 17px;
+}
+
+.developer-avatar {
+    width: 65px;
+    height: 65px;
+    flex-shrink: 0;
+    border: 2px solid rgba(139,92,246,.22);
+    border-radius: 18px;
+    object-fit: cover;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #fff;
+}
+
+.developer-avatar-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.65rem;
+}
+
+.developer-identity {
+    min-width: 0;
+}
+
+.developer-name {
+    margin: 0 0 5px;
+    overflow-wrap: anywhere;
+    color: var(--text);
+    font-size: 1.08rem;
+    font-weight: 800;
+}
+
+.developer-username {
+    margin: 0;
+    overflow-wrap: anywhere;
+    color: var(--muted);
+    font-size: .83rem;
+}
+
+.developer-location {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 13px;
+    color: var(--muted);
+    font-size: .82rem;
+    overflow-wrap: anywhere;
+}
+
+.developer-location i {
+    color: #8b5cf6;
+}
+
+.developer-bio {
+    min-height: 66px;
+    margin-bottom: 17px;
+    color: var(--muted);
+    font-size: .87rem;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   SKILLS
+   ========================================================= */
+
+.developer-skills {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 7px;
+    min-height: 40px;
+    margin-bottom: 20px;
+}
+
+.skill-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 10px;
+    border: 1px solid rgba(99,102,241,.17);
+    border-radius: 8px;
+    background: rgba(99,102,241,.09);
+    color: #818cf8;
+    font-size: .75rem;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.no-skills {
+    color: var(--muted);
+    font-size: .8rem;
+}
+
+/* =========================================================
+   PROFILE LINK
+   ========================================================= */
+
+.developer-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 15px;
+    border-top: 1px solid var(--border);
+}
+
+.developer-card-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted);
+    font-size: .77rem;
+}
+
+.directory-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: #818cf8;
+    font-size: .84rem;
+    font-weight: 750;
+    text-decoration: none;
+    transition: gap .2s ease, color .2s ease;
+}
+
+.directory-link:hover {
+    gap: 11px;
+    color: #a78bfa;
+}
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.empty-state {
+    padding: 55px 20px;
+    text-align: center;
+    border: 1px dashed rgba(139,92,246,.35);
+    border-radius: 20px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+}
+
+.empty-state-icon {
+    width: 75px;
+    height: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 19px;
+    border-radius: 22px;
+    background: rgba(139,92,246,.11);
+    color: #8b5cf6;
+    font-size: 2.2rem;
+}
+
+.empty-state h3 {
+    color: var(--text);
+    font-weight: 800;
+}
+
+.empty-state p {
+    max-width: 460px;
+    margin: 10px auto 18px;
+    color: var(--muted);
+    font-size: .9rem;
+    line-height: 1.7;
+}
+
+/* =========================================================
+   PAGINATION
+   ========================================================= */
+
+.directory-pagination {
+    margin-top: 45px;
+}
+
+.directory-pagination .pagination {
+    gap: 5px;
+}
+
+.directory-pagination .page-link {
+    min-width: 38px;
+    padding: 9px 13px;
+    border: 1px solid var(--border);
+    border-radius: 9px !important;
+    background: var(--surface);
+    color: var(--text);
+    text-align: center;
+    font-size: .84rem;
+    font-weight: 650;
+    box-shadow: none;
+    transition: all .2s ease;
+}
+
+.directory-pagination .page-link:hover {
+    border-color: #818cf8;
+    background: rgba(99,102,241,.1);
+    color: #818cf8;
+}
+
+.directory-pagination .page-item.active .page-link {
+    border-color: transparent;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(99,102,241,.2);
+}
+
+.directory-pagination .page-item.disabled .page-link {
+    background: var(--surface-soft);
+    color: var(--muted);
+    opacity: .55;
+}
+
+/* =========================================================
+   DARK MODE REFINEMENTS
+   ========================================================= */
+
+body.dark-mode .directory-header {
+    background:
+        radial-gradient(circle at 10% 20%, rgba(99,102,241,.15), transparent 35%),
+        radial-gradient(circle at 90% 80%, rgba(139,92,246,.12), transparent 35%),
+        var(--page-bg);
+}
+
+body.dark-mode .developer-result-card {
+    background: var(--surface);
+    border-color: var(--border);
+    box-shadow: 0 8px 25px rgba(0,0,0,.16);
+}
+
+body.dark-mode .developer-result-card:hover {
+    border-color: rgba(139,92,246,.5);
+    box-shadow: 0 15px 35px rgba(0,0,0,.25);
+}
+
+body.dark-mode .directory-search .input-group {
+    background: var(--surface);
+    border-color: var(--border);
+}
+
+body.dark-mode .directory-result-count,
+body.dark-mode .empty-state,
+body.dark-mode .directory-pagination .page-link {
+    background: var(--surface);
+    color: var(--text);
+}
+
+body.dark-mode .skill-badge {
+    background: rgba(129,140,248,.13);
+    border-color: rgba(129,140,248,.2);
+    color: #a5b4fc;
+}
+
+body.dark-mode .developer-name,
+body.dark-mode .directory-section-title,
+body.dark-mode .empty-state h3 {
+    color: var(--text);
+}
+
+/* =========================================================
+   RESPONSIVE DESIGN
+   ========================================================= */
+
+@media (max-width: 991.98px) {
+    .directory-header {
+        padding: 60px 20px 45px;
+    }
+
+    .directory-content {
+        padding-top: 35px;
+    }
+
+    .developer-result-card {
+        padding: 21px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .directory-header {
+        padding: 48px 17px 40px;
+    }
+
+    .directory-title {
+        letter-spacing: -1px;
+    }
+
+    .directory-description {
+        font-size: .9rem;
+    }
+
+    .directory-content {
+        padding-top: 30px;
+    }
+
+    .directory-section-heading {
+        align-items: flex-start;
+    }
+
+    .directory-result-count {
+        font-size: .75rem;
+        padding: 8px 11px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .directory-header {
+        padding: 40px 14px 34px;
+    }
+
+    .directory-label {
+        font-size: .68rem;
+        padding: 7px 11px;
+    }
+
+    .directory-title {
+        font-size: 2rem;
+        margin-top: 17px;
+    }
+
+    .directory-search {
+        margin-top: 25px;
+    }
+
+    .directory-search .input-group {
+        padding: 5px;
+    }
+
+    .directory-search .form-control {
+        min-width: 0;
+        font-size: .8rem;
+        padding-left: 10px;
+    }
+
+    .directory-search .btn {
+        padding: 0 13px;
+        font-size: .82rem;
+    }
+
+    .directory-content {
+        padding-top: 25px;
+    }
+
+    .directory-section-title {
+        font-size: 1.02rem;
+    }
+
+    .directory-heading-icon {
+        width: 37px;
+        height: 37px;
+        font-size: 16px;
+    }
+
+    .developer-result-card {
+        padding: 19px;
+    }
+
+    .developer-avatar {
+        width: 58px;
+        height: 58px;
+        border-radius: 16px;
+    }
+
+    .developer-name {
+        font-size: 1rem;
+    }
+
+    .developer-bio {
+        min-height: auto;
+    }
+
+    .directory-pagination .page-link {
+        min-width: 34px;
+        padding: 8px 10px;
+        font-size: .78rem;
+    }
+
+    .empty-state {
+        padding: 40px 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .developer-result-card,
+    .directory-link,
+    .directory-search .input-group,
+    .directory-pagination .page-link {
+        transition: none;
+    }
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="directory-page">
+
+    <!-- =================================================
+         DIRECTORY HERO
+    ================================================== -->
+
+    <header class="directory-header text-center">
+        <div class="container">
+
+            <span class="directory-label">
+                <i class="bi bi-stars"></i>
+                THE DEVELOPER COMMUNITY
+            </span>
+
+            <h1 class="directory-title">
+                Discover developers.
+                <br class="d-none d-sm-block">
+                <span class="gradient-text">Build connections.</span>
+            </h1>
+
+            <p class="directory-description">
+                Find talented developers, explore their skills,
+                and discover people to learn, collaborate, and build with.
+            </p>
+
+            <!-- Search -->
+            <form method="get" class="directory-search">
+                <div class="input-group">
+
+                    <input
+                        type="search"
+                        name="q"
+                        class="form-control"
+                        placeholder="Search username, name, skills, or location..."
+                        value="{{ search_query }}"
+                        aria-label="Search developers"
+                    >
+
+                    <button class="btn btn-primary-gradient" type="submit">
+                        <i class="bi bi-search me-1"></i>
+                        Search
+                    </button>
+
+                </div>
+            </form>
+
+        </div>
+    </header>
+
+
+    <!-- =================================================
+         DEVELOPER DIRECTORY
+    ================================================== -->
+
+    <main class="directory-content">
+        <div class="container">
+
+            <!-- Section Heading -->
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+
+                <div class="directory-section-heading">
+
+                    <span class="directory-heading-icon">
+                        <i class="bi bi-people-fill"></i>
+                    </span>
+
+                    <div>
+                        <h2 class="directory-section-title">
+                            Developer Community
+                        </h2>
+
+                        <p class="directory-section-subtitle">
+                            {% if search_query %}
+                                Search results for "{{ search_query }}"
+                            {% else %}
+                                Explore registered developer profiles
+                            {% endif %}
+                        </p>
+                    </div>
+
+                </div>
+
+                <span class="directory-result-count">
+                    <i class="bi bi-person-check-fill"></i>
+                    {{ page_obj.paginator.count }}
+                    Profile{{ page_obj.paginator.count|pluralize }}
+                </span>
+
+            </div>
+
+
+            {% if page_obj %}
+
+                <!-- Developer Cards -->
+                <div class="row g-4">
+
+                    {% for profile in page_obj %}
+
+                        <div class="col-md-6 col-lg-4">
+
+                            <article class="developer-result-card">
+
+                                <!-- Developer Identity -->
+                                <div class="developer-card-header">
+
+                                    {% if profile.profile_picture %}
+
+                                        <img
+                                            src="{{ profile.profile_picture }}"
+                                            alt="{{ profile.user.username }}'s profile picture"
+                                            class="developer-avatar"
+                                            loading="lazy"
+                                        >
+
+                                    {% else %}
+
+                                        <div class="developer-avatar developer-avatar-placeholder">
+                                            <i class="bi bi-person-fill"></i>
+                                        </div>
+
+                                    {% endif %}
+
+                                    <div class="developer-identity">
+
+                                        <h3 class="developer-name">
+                                            {% if profile.user.get_full_name %}
+                                                {{ profile.user.get_full_name }}
+                                            {% else %}
+                                                {{ profile.user.username }}
+                                            {% endif %}
+                                        </h3>
+
+                                        <p class="developer-username">
+                                            @{{ profile.user.username }}
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Location -->
+                                {% if profile.location %}
+
+                                    <div class="developer-location">
+                                        <i class="bi bi-geo-alt-fill"></i>
+                                        {{ profile.location }}
+                                    </div>
+
+                                {% endif %}
+
+
+                                <!-- Bio -->
+                                <p class="developer-bio">
+
+                                    {% if profile.bio %}
+                                        {{ profile.bio|truncatechars:115 }}
+                                    {% else %}
+                                        This developer hasn't added a bio yet.
+                                    {% endif %}
+
+                                </p>
+
+
+                                <!-- Skills -->
+                                <div class="developer-skills">
+
+                                    {% for skill in profile.get_skills_list %}
+
+                                        <span class="skill-badge">
+                                            {{ skill }}
+                                        </span>
+
+                                    {% empty %}
+
+                                        <span class="no-skills">
+                                            <i class="bi bi-info-circle me-1"></i>
+                                            No skills added yet.
+                                        </span>
+
+                                    {% endfor %}
+
+                                </div>
+
+
+                                <!-- Profile Footer -->
+                                <div class="developer-card-footer">
+
+                                    <span class="developer-card-label">
+                                        <i class="bi bi-person-badge"></i>
+                                        Developer
+                                    </span>
+
+                                    <a
+                                        href="{% url 'public_profile' profile.user.username %}"
+                                        class="directory-link"
+                                    >
+                                        View Profile
+                                        <i class="bi bi-arrow-up-right"></i>
+                                    </a>
+
+                                </div>
+
+                            </article>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- =================================================
+                     PAGINATION
+                ================================================== -->
+
+                {% if page_obj.has_other_pages %}
+
+                    <nav
+                        class="directory-pagination"
+                        aria-label="Developer directory pages"
+                    >
+
+                        <ul class="pagination justify-content-center flex-wrap">
+
+                            <!-- Previous -->
+                            {% if page_obj.has_previous %}
+
+                                <li class="page-item">
+                                    <a
+                                        class="page-link"
+                                        href="?q={{ search_query|urlencode }}&page={{ page_obj.previous_page_number }}"
+                                        aria-label="Previous page"
+                                    >
+                                        <i class="bi bi-chevron-left me-1"></i>
+                                        Previous
+                                    </a>
+                                </li>
+
+                            {% endif %}
+
+
+                            <!-- Page Numbers -->
+                            {% for number in page_obj.paginator.page_range %}
+
+                                {% if page_obj.number == number %}
+
+                                    <li class="page-item active" aria-current="page">
+                                        <span class="page-link">
+                                            {{ number }}
+                                        </span>
+                                    </li>
+
+                                {% elif number > page_obj.number|add:"-3" and number < page_obj.number|add:"3" %}
+
+                                    <li class="page-item">
+                                        <a
+                                            class="page-link"
+                                            href="?q={{ search_query|urlencode }}&page={{ number }}"
+                                        >
+                                            {{ number }}
+                                        </a>
+                                    </li>
+
+                                {% endif %}
+
+                            {% endfor %}
+
+
+                            <!-- Next -->
+                            {% if page_obj.has_next %}
+
+                                <li class="page-item">
+                                    <a
+                                        class="page-link"
+                                        href="?q={{ search_query|urlencode }}&page={{ page_obj.next_page_number }}"
+                                        aria-label="Next page"
+                                    >
+                                        Next
+                                        <i class="bi bi-chevron-right ms-1"></i>
+                                    </a>
+                                </li>
+
+                            {% endif %}
+
+                        </ul>
+
+                    </nav>
+
+                {% endif %}
+
+
+            {% else %}
+
+                <!-- =================================================
+                     EMPTY STATE
+                ================================================== -->
+
+                <div class="empty-state">
+
+                    <div class="empty-state-icon">
+                        <i class="bi bi-people"></i>
+                    </div>
+
+                    <h3 class="h4">
+                        No Developers Found
+                    </h3>
+
+                    <p>
+
+                        {% if search_query %}
+                            We couldn't find any developers matching
+                            "{{ search_query }}". Try another search term
+                            or clear your search.
+                        {% else %}
+                            No developer profiles are available yet.
+                            Be one of the first to join the community.
+                        {% endif %}
+
+                    </p>
+
+
+                    {% if search_query %}
+
+                        <a
+                            href="{% url 'developer_directory' %}"
+                            class="btn btn-primary-gradient mt-2"
+                        >
+                            <i class="bi bi-arrow-counterclockwise me-1"></i>
+                            Clear Search
+                        </a>
+
+                    {% elif request.user.is_authenticated %}
+
+                        <a
+                            href="{% url 'edit_profile' %}"
+                            class="btn btn-primary-gradient mt-2"
+                        >
+                            <i class="bi bi-person-gear me-1"></i>
+                            Complete Your Profile
+                        </a>
+
+                    {% else %}
+
+                        <a
+                            href="{% url 'auth:register' %}"
+                            class="btn btn-primary-gradient mt-2"
+                        >
+                            <i class="bi bi-person-plus me-1"></i>
+                            Join DevConnect
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+            {% endif %}
+
+        </div>
+    </main>
+
+</div>
+
+{% endblock %}

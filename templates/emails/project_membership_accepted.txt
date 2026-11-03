@@ -1,0 +1,17 @@
+Hello {{ applicant_username }},
+
+Great news!
+
+{{ owner_username }} has accepted your request to join:
+
+{{ project_title }}
+
+You are now an accepted member of this project.
+
+Visit the project page:
+
+{{ project_url }}
+
+Happy building!
+
+The DevConnect Team

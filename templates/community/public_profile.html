@@ -1,0 +1,628 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ profile.user.username }} | DevConnect{% endblock %}
+
+{% block meta_description %}
+View {{ profile.user.username }}'s developer profile, skills, technologies and social links on DevConnect.
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .public-profile-section {
+        min-height: 70vh;
+        padding: 65px 0;
+    }
+
+    .public-profile-card {
+        max-width: 850px;
+        margin: auto;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 26px;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+        transition: background .25s ease, box-shadow .25s ease;
+    }
+
+    .profile-cover {
+        height: 155px;
+        background: linear-gradient(120deg, #6366f1, #8b5cf6);
+        position: relative;
+    }
+
+    .profile-cover::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            120deg,
+            rgba(255,255,255,.08),
+            transparent 65%
+        );
+    }
+
+    .public-profile-body {
+        padding: 0 35px 35px;
+    }
+
+    .public-profile-avatar {
+        width: 115px;
+        height: 115px;
+        margin-top: -58px;
+        border: 5px solid var(--surface);
+        border-radius: 28px;
+        object-fit: cover;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: #fff;
+        position: relative;
+        z-index: 1;
+    }
+
+    .public-profile-avatar-placeholder {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.7rem;
+    }
+
+    .public-profile-name {
+        margin-top: 18px;
+        margin-bottom: 5px;
+        font-size: clamp(1.7rem, 4vw, 2.4rem);
+        font-weight: 800;
+        color: var(--text);
+        overflow-wrap: anywhere;
+    }
+
+    .public-profile-muted {
+        color: var(--muted);
+    }
+
+    .profile-action-area {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .connection-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        padding: 11px 20px;
+        border: 0;
+        border-radius: 12px;
+        font-size: .94rem;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all .2s ease;
+        cursor: pointer;
+    }
+
+    .connection-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .connection-btn-primary {
+        color: #fff;
+        background: linear-gradient(120deg, #6366f1, #8b5cf6);
+        box-shadow: 0 5px 15px rgba(99, 102, 241, .2);
+    }
+
+    .connection-btn-primary:hover {
+        color: #fff;
+        box-shadow: 0 8px 20px rgba(99, 102, 241, .3);
+    }
+
+    .connection-btn-success {
+        color: #fff;
+        background: linear-gradient(120deg, #059669, #10b981);
+    }
+
+    .connection-btn-success:hover {
+        color: #fff;
+    }
+
+    .connection-btn-danger {
+        color: #fff;
+        background: linear-gradient(120deg, #dc2626, #ef4444);
+    }
+
+    .connection-btn-danger:hover {
+        color: #fff;
+    }
+
+    .connection-btn-warning {
+        color: var(--text);
+        background: var(--surface-soft);
+        border: 1px solid var(--border);
+    }
+
+    .connection-btn-warning:hover {
+        background: var(--surface);
+        color: var(--text);
+    }
+
+    .connection-status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 16px;
+        border-radius: 12px;
+        background: rgba(16, 185, 129, .12);
+        color: #059669;
+        font-size: .92rem;
+        font-weight: 750;
+        border: 1px solid rgba(16, 185, 129, .2);
+    }
+
+    .connection-pending-badge {
+        background: rgba(245, 158, 11, .12);
+        color: #d97706;
+        border-color: rgba(245, 158, 11, .2);
+    }
+
+    .connection-rejected-badge {
+        background: rgba(239, 68, 68, .10);
+        color: #dc2626;
+        border-color: rgba(239, 68, 68, .18);
+    }
+
+    .profile-detail-section {
+        padding-top: 25px;
+        margin-top: 25px;
+        border-top: 1px solid var(--border);
+    }
+
+    .profile-detail-heading {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.05rem;
+        font-weight: 750;
+        color: var(--text);
+        margin-bottom: 16px;
+    }
+
+    .profile-detail-heading i {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 35px;
+        height: 35px;
+        border-radius: 10px;
+        color: #6366f1;
+        background: rgba(99, 102, 241, .11);
+        font-size: 1.1rem;
+    }
+
+    .public-skill {
+        display: inline-block;
+        padding: 8px 13px;
+        margin: 3px;
+        border-radius: 999px;
+        background: rgba(99, 102, 241, .11);
+        color: #818cf8;
+        font-size: .88rem;
+        font-weight: 650;
+        border: 1px solid rgba(99, 102, 241, .12);
+    }
+
+    .profile-social-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin: 5px 8px 5px 0;
+        padding: 10px 14px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        color: var(--text);
+        background: var(--surface-soft);
+        text-decoration: none;
+        overflow-wrap: anywhere;
+        transition: all .2s ease;
+    }
+
+    .profile-social-link:hover {
+        color: #818cf8;
+        border-color: #818cf8;
+        transform: translateY(-2px);
+    }
+
+    .directory-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        color: #818cf8;
+        text-decoration: none;
+        font-weight: 650;
+        transition: all .2s ease;
+    }
+
+    .directory-link:hover {
+        color: #6366f1;
+        transform: translateX(-3px);
+    }
+
+    .profile-login-hint {
+        width: 100%;
+        margin-top: 3px;
+        font-size: .85rem;
+        color: var(--muted);
+    }
+
+    .connection-form {
+        display: inline-flex;
+        margin: 0;
+    }
+
+    @media (max-width: 575.98px) {
+        .public-profile-section {
+            padding: 35px 0;
+        }
+
+        .public-profile-body {
+            padding: 0 20px 25px;
+        }
+
+        .profile-cover {
+            height: 120px;
+        }
+
+        .public-profile-avatar {
+            width: 100px;
+            height: 100px;
+            margin-top: -50px;
+        }
+
+        .profile-action-area {
+            align-items: stretch;
+        }
+
+        .profile-action-area .connection-btn {
+            flex: 1 1 100%;
+        }
+
+        .profile-action-area .connection-form {
+            width: 100%;
+        }
+
+        .profile-action-area .connection-form .connection-btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<main class="public-profile-section">
+    <div class="container">
+
+        <article class="public-profile-card">
+
+            <!-- Profile cover -->
+            <div class="profile-cover"></div>
+
+            <div class="public-profile-body">
+
+                <!-- Profile picture -->
+                {% if profile.profile_picture %}
+
+                    <img
+                        src="{{ profile.profile_picture }}"
+                        alt="{{ profile.user.username }}'s profile picture"
+                        class="public-profile-avatar"
+                    >
+
+                {% else %}
+
+                    <div class="public-profile-avatar public-profile-avatar-placeholder">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+
+                {% endif %}
+
+
+                <!-- Developer information -->
+                <h1 class="public-profile-name">
+                    {% if profile.user.get_full_name %}
+                        {{ profile.user.get_full_name }}
+                    {% else %}
+                        {{ profile.user.username }}
+                    {% endif %}
+                </h1>
+
+                <p class="public-profile-muted mb-2">
+                    @{{ profile.user.username }}
+                </p>
+
+                {% if profile.location %}
+                    <p class="public-profile-muted mb-0">
+                        <i class="bi bi-geo-alt me-1"></i>
+                        {{ profile.location }}
+                    </p>
+                {% endif %}
+
+
+                <!-- Profile and connection actions -->
+                <div class="profile-action-area">
+
+                    {% if request.user.is_authenticated %}
+
+                        {% if request.user.pk == profile.user_id %}
+
+                            <!-- Own profile -->
+                            <a
+                                href="{% url 'edit_profile' %}"
+                                class="connection-btn connection-btn-primary"
+                            >
+                                <i class="bi bi-pencil-square"></i>
+                                Edit My Profile
+                            </a>
+
+                        {% else %}
+
+                            {% if connection_status == "none" %}
+
+                                <!-- No existing connection -->
+                                <form
+                                    method="POST"
+                                    action="{% url 'send_connection_request' profile.user.username %}"
+                                    class="connection-form"
+                                >
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="connection-btn connection-btn-primary"
+                                    >
+                                        <i class="bi bi-person-plus-fill"></i>
+                                        Connect
+                                    </button>
+                                </form>
+
+
+                            {% elif connection_status == "sent" %}
+
+                                <!-- Outgoing request -->
+                                <span class="connection-status-badge connection-pending-badge">
+                                    <i class="bi bi-clock-history"></i>
+                                    Request Sent
+                                </span>
+
+                                <form
+                                    method="POST"
+                                    action="{% url 'cancel_connection_request' connection.id %}"
+                                    class="connection-form"
+                                >
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="connection-btn connection-btn-warning"
+                                        onclick="return confirm('Are you sure you want to cancel this connection request?');"
+                                    >
+                                        <i class="bi bi-x-circle"></i>
+                                        Cancel Request
+                                    </button>
+                                </form>
+
+
+                            {% elif connection_status == "received" %}
+
+                                <!-- Incoming request -->
+                                <form
+                                    method="POST"
+                                    action="{% url 'accept_connection_request' connection.id %}"
+                                    class="connection-form"
+                                >
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="connection-btn connection-btn-success"
+                                    >
+                                        <i class="bi bi-person-check-fill"></i>
+                                        Accept Request
+                                    </button>
+                                </form>
+
+                                <form
+                                    method="POST"
+                                    action="{% url 'reject_connection_request' connection.id %}"
+                                    class="connection-form"
+                                >
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="connection-btn connection-btn-danger"
+                                        onclick="return confirm('Are you sure you want to reject this connection request?');"
+                                    >
+                                        <i class="bi bi-person-x-fill"></i>
+                                        Reject
+                                    </button>
+                                </form>
+
+
+                            {% elif connection_status == "connected" %}
+
+                                <!-- Already connected -->
+                                <span class="connection-status-badge">
+                                    <i class="bi bi-person-check-fill"></i>
+                                    Connected
+                                </span>
+
+                                <a
+                                    href="{% url 'my_connections' %}"
+                                    class="connection-btn connection-btn-warning"
+                                >
+                                    <i class="bi bi-people-fill"></i>
+                                    My Connections
+                                </a>
+
+
+                            {% elif connection_status == "rejected" %}
+
+                                <!-- Previously rejected request -->
+                                <span class="connection-status-badge connection-rejected-badge">
+                                    <i class="bi bi-person-x-fill"></i>
+                                    Previous Request Declined
+                                </span>
+
+                            {% endif %}
+
+                        {% endif %}
+
+                    {% else %}
+
+                        <!-- Guest user -->
+                        <a
+                            href="{% url 'auth:login' %}?next={{ request.path|urlencode }}"
+                            class="connection-btn connection-btn-primary"
+                        >
+                            <i class="bi bi-person-plus-fill"></i>
+                            Sign in to Connect
+                        </a>
+
+                        <p class="profile-login-hint">
+                            Sign in to DevConnect to connect with this developer.
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- About -->
+                <section class="profile-detail-section">
+
+                    <h2 class="profile-detail-heading">
+                        <i class="bi bi-person-lines-fill"></i>
+                        About
+                    </h2>
+
+                    {% if profile.bio %}
+
+                        <p class="public-profile-muted mb-0" style="white-space: pre-line;">
+                            {{ profile.bio }}
+                        </p>
+
+                    {% else %}
+
+                        <p class="public-profile-muted mb-0">
+                            This developer hasn't added a biography yet.
+                        </p>
+
+                    {% endif %}
+
+                </section>
+
+
+                <!-- Skills -->
+                <section class="profile-detail-section">
+
+                    <h2 class="profile-detail-heading">
+                        <i class="bi bi-code-slash"></i>
+                        Skills &amp; Technologies
+                    </h2>
+
+                    {% for skill in profile.get_skills_list %}
+
+                        <span class="public-skill">
+                            {{ skill }}
+                        </span>
+
+                    {% empty %}
+
+                        <p class="public-profile-muted">
+                            No skills have been added yet.
+                        </p>
+
+                    {% endfor %}
+
+                </section>
+
+
+                <!-- Social links -->
+                {% if profile.github_url or profile.linkedin_url or profile.portfolio_url %}
+
+                    <section class="profile-detail-section">
+
+                        <h2 class="profile-detail-heading">
+                            <i class="bi bi-link-45deg"></i>
+                            Connect &amp; Explore
+                        </h2>
+
+                        {% if profile.github_url %}
+
+                            <a
+                                href="{{ profile.github_url }}"
+                                class="profile-social-link"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <i class="bi bi-github"></i>
+                                GitHub
+                            </a>
+
+                        {% endif %}
+
+
+                        {% if profile.linkedin_url %}
+
+                            <a
+                                href="{{ profile.linkedin_url }}"
+                                class="profile-social-link"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <i class="bi bi-linkedin"></i>
+                                LinkedIn
+                            </a>
+
+                        {% endif %}
+
+
+                        {% if profile.portfolio_url %}
+
+                            <a
+                                href="{{ profile.portfolio_url }}"
+                                class="profile-social-link"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <i class="bi bi-globe"></i>
+                                Portfolio
+                            </a>
+
+                        {% endif %}
+
+                    </section>
+
+                {% endif %}
+
+            </div>
+        </article>
+
+
+        <!-- Back to directory -->
+        <div class="text-center mt-4">
+
+            <a
+                href="{% url 'developer_directory' %}"
+                class="directory-link"
+            >
+                <i class="bi bi-arrow-left"></i>
+                Back to Developer Directory
+            </a>
+
+        </div>
+
+    </div>
+</main>
+{% endblock %}

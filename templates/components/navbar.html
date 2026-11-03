@@ -1,0 +1,618 @@
+<nav class="navbar navbar-expand-lg nv-navbar sticky-top">
+    <div class="container">
+
+        <!-- Brand -->
+        <a class="navbar-brand nv-brand" href="{% url 'home' %}">
+            <span class="brand-icon">
+                <i class="bi bi-code-slash"></i>
+            </span>
+
+            <span class="brand-text">
+                <span class="brand-highlight">DevConnect</span>
+                <small class="brand-subtitle">BUILD. SHARE. GROW.</small>
+            </span>
+        </a>
+
+        <!-- Mobile Toggle -->
+        <button
+            class="navbar-toggler nv-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#mainNavigation"
+            aria-controls="mainNavigation"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+        >
+            <i class="bi bi-list"></i>
+        </button>
+
+        <!-- Navigation -->
+        <div class="collapse navbar-collapse" id="mainNavigation">
+
+            <ul class="navbar-nav mx-auto nv-menu">
+
+                <!-- Home -->
+                <li class="nav-item">
+                    <a
+                        class="nav-link nv-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}"
+                        href="{% url 'home' %}"
+                    >
+                        <i class="bi bi-house-door"></i>
+                        <span>Home</span>
+                    </a>
+                </li>
+
+                <!-- Developers -->
+                <li class="nav-item">
+                    <a
+                        class="nav-link nv-link {% if request.resolver_match.url_name == 'developer_directory' %}active{% endif %}"
+                        href="{% url 'developer_directory' %}"
+                    >
+                        <i class="bi bi-people"></i>
+                        <span>Developers</span>
+                    </a>
+                </li>
+
+                <!-- Projects -->
+                <li class="nav-item">
+                    <a
+                        class="nav-link nv-link {% if request.resolver_match.namespace == 'projects' and request.resolver_match.url_name != 'mine' %}active{% endif %}"
+                        href="{% url 'projects:list' %}"
+                    >
+                        <i class="bi bi-kanban"></i>
+                        <span>Projects</span>
+                    </a>
+                </li>
+
+
+                <!-- Features -->
+                <li class="nav-item">
+                    <a
+                        class="nav-link nv-link"
+                        href="{% url 'features' %}"
+                    >
+                        <i class="bi bi-grid"></i>
+                        <span>Features</span>
+                    </a>
+                </li>
+
+                <!-- Connections -->
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a
+                            class="nav-link nv-link {% if request.resolver_match.url_name == 'my_connections' %}active{% endif %}"
+                            href="{% url 'my_connections' %}"
+                        >
+                            <i class="bi bi-person-hearts"></i>
+                            <span>Connections</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+            </ul>
+
+            <!-- Right Actions -->
+            <div class="nv-actions">
+
+                <!-- Theme Toggle -->
+                <button
+                    class="nv-theme-btn"
+                    id="themeToggle"
+                    type="button"
+                    aria-label="Switch to dark mode"
+                    title="Toggle theme"
+                >
+                    <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+                </button>
+
+                {% if request.user.is_authenticated %}
+
+                    <!-- Profile Dropdown -->
+                    <div class="dropdown nv-profile-dropdown">
+
+                        <button
+                            class="nv-profile-btn dropdown-toggle"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                        >
+                            <span class="nv-avatar">
+                                <i class="bi bi-person-fill"></i>
+                            </span>
+
+                            <span class="nv-profile-name">
+                                {{ request.user.username }}
+                            </span>
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-menu-end nv-dropdown">
+
+                            <li>
+                                <div class="nv-dropdown-heading">
+                                    <strong>{{ request.user.username }}</strong>
+                                    <small>Developer Account</small>
+                                </div>
+                            </li>
+
+                            <li><hr class="dropdown-divider"></li>
+
+                            <li>
+                                <a class="dropdown-item" href="{% url 'my_profile' %}">
+                                    <i class="bi bi-person-circle"></i>
+                                    My Profile
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item" href="{% url 'edit_profile' %}">
+                                    <i class="bi bi-person-gear"></i>
+                                    Edit Profile
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item" href="{% url 'projects:mine' %}">
+                                    <i class="bi bi-folder2-open"></i>
+                                    My Projects
+                                </a>
+                            </li>
+
+                            <li><hr class="dropdown-divider"></li>
+
+                            <li>
+                                <form method="post" action="{% url 'auth:logout' %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item nv-logout">
+                                        <i class="bi bi-box-arrow-right"></i>
+                                        Logout
+                                    </button>
+                                </form>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                {% else %}
+
+                    <!-- Guest Actions -->
+                    <a href="{% url 'auth:login' %}" class="nv-login-btn">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                        Sign in
+                    </a>
+
+                    <a href="{% url 'auth:register' %}" class="nv-register-btn">
+                        Join DevConnect
+                        <i class="bi bi-arrow-up-right"></i>
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+
+<style>
+/* =====================================================
+   DEVCONNECT NAVBAR
+   Compact • Responsive • Light/Dark Theme
+===================================================== */
+
+.nv-navbar {
+    min-height: 72px;
+    padding: 9px 0;
+    background: var(--navbar-bg);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    z-index: 1030;
+}
+
+/* Brand */
+
+.nv-navbar .nv-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-right: 24px;
+    padding: 0;
+}
+
+.nv-navbar .brand-icon {
+    width: 39px;
+    height: 39px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #fff;
+    font-size: 19px;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, .22);
+}
+
+.nv-navbar .brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+.nv-navbar .brand-highlight {
+    font-size: 19px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -.5px;
+}
+
+.nv-navbar .brand-subtitle {
+    margin-top: 4px;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+    color: var(--muted);
+}
+
+/* Navigation Menu */
+
+.nv-navbar .nv-menu {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.nv-navbar .nv-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 9px 11px !important;
+    border-radius: 9px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 650;
+    white-space: nowrap;
+    transition: all .2s ease;
+}
+
+.nv-navbar .nv-link i {
+    font-size: 14px;
+}
+
+.nv-navbar .nv-link:hover {
+    color: var(--primary);
+    background: var(--surface-soft);
+}
+
+.nv-navbar .nv-link.active {
+    color: #6366f1;
+    background: rgba(99, 102, 241, .11);
+}
+
+/* Right Actions */
+
+.nv-navbar .nv-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 9px;
+}
+
+/* Theme Toggle */
+
+.nv-navbar .nv-theme-btn {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--muted);
+    background: var(--surface);
+    transition: all .2s ease;
+}
+
+.nv-navbar .nv-theme-btn:hover {
+    color: #6366f1;
+    border-color: #6366f1;
+    transform: translateY(-1px);
+}
+
+/* Profile Button */
+
+.nv-navbar .nv-profile-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 10px 5px 6px;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: var(--surface);
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 700;
+    box-shadow: none;
+}
+
+.nv-navbar .nv-profile-btn::after {
+    margin-left: 3px;
+}
+
+.nv-navbar .nv-profile-btn:hover,
+.nv-navbar .nv-profile-btn:focus {
+    border-color: #818cf8;
+    color: var(--text);
+}
+
+.nv-navbar .nv-avatar {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #fff;
+    font-size: 14px;
+}
+
+.nv-navbar .nv-profile-name {
+    max-width: 105px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Profile Dropdown */
+
+.nv-navbar .nv-dropdown {
+    min-width: 215px;
+    margin-top: 12px !important;
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+    box-shadow: var(--shadow-hover);
+}
+
+.nv-navbar .nv-dropdown-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 10px;
+    color: var(--text);
+    font-size: 13px;
+}
+
+.nv-navbar .nv-dropdown-heading small {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.nv-navbar .nv-dropdown .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 10px;
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 550;
+    transition: all .2s ease;
+}
+
+.nv-navbar .nv-dropdown .dropdown-item i {
+    width: 17px;
+    color: var(--muted);
+    font-size: 15px;
+}
+
+.nv-navbar .nv-dropdown .dropdown-item:hover {
+    color: #6366f1;
+    background: var(--surface-soft);
+}
+
+.nv-navbar .nv-dropdown .dropdown-item:hover i {
+    color: #6366f1;
+}
+
+.nv-navbar .nv-dropdown .dropdown-divider {
+    border-color: var(--border);
+}
+
+.nv-navbar .nv-dropdown .nv-logout {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    color: #ef4444;
+}
+
+.nv-navbar .nv-dropdown .nv-logout i {
+    color: #ef4444;
+}
+
+/* Guest Buttons */
+
+.nv-navbar .nv-login-btn,
+.nv-navbar .nv-register-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 8px 12px;
+    border-radius: 9px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: all .2s ease;
+}
+
+.nv-navbar .nv-login-btn {
+    color: var(--text);
+    border: 1px solid var(--border);
+    background: var(--surface);
+}
+
+.nv-navbar .nv-login-btn:hover {
+    color: #6366f1;
+    border-color: #6366f1;
+}
+
+.nv-navbar .nv-register-btn {
+    color: #fff;
+    border: 1px solid transparent;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, .17);
+}
+
+.nv-navbar .nv-register-btn:hover {
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(99, 102, 241, .25);
+}
+
+/* Mobile Toggle */
+
+.nv-navbar .nv-toggler {
+    width: 39px;
+    height: 37px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    background: var(--surface);
+    font-size: 21px;
+    box-shadow: none !important;
+}
+
+.nv-navbar .nv-toggler:focus {
+    border-color: #6366f1;
+}
+
+/* Dropdown theme compatibility */
+
+.nv-navbar .dropdown-menu {
+    color: var(--text);
+}
+
+.nv-navbar .dropdown-divider {
+    border-color: var(--border);
+}
+
+/* Tablet and Mobile */
+
+@media (max-width: 991.98px) {
+
+    .nv-navbar {
+        padding: 10px 0;
+    }
+
+    .nv-navbar .navbar-collapse {
+        margin-top: 13px;
+        padding: 13px;
+        border: 1px solid var(--border);
+        border-radius: 15px;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+    }
+
+    .nv-navbar .nv-menu {
+        align-items: stretch;
+        gap: 4px;
+        margin-bottom: 12px !important;
+    }
+
+    .nv-navbar .nv-menu .nav-item {
+        width: 100%;
+    }
+
+    .nv-navbar .nv-link {
+        width: 100%;
+        justify-content: flex-start;
+        padding: 11px 12px !important;
+        font-size: 13px;
+    }
+
+    .nv-navbar .nv-link i {
+        width: 19px;
+        font-size: 15px;
+    }
+
+    .nv-navbar .nv-actions {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        padding-top: 12px;
+        border-top: 1px solid var(--border);
+    }
+
+    .nv-navbar .nv-profile-dropdown {
+        flex: 1;
+    }
+
+    .nv-navbar .nv-profile-btn {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .nv-navbar .nv-dropdown {
+        width: 100%;
+    }
+
+    .nv-navbar .nv-login-btn,
+    .nv-navbar .nv-register-btn {
+        flex: 1;
+        min-height: 37px;
+    }
+}
+
+/* Small Mobile */
+
+@media (max-width: 480px) {
+
+    .nv-navbar .container {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .nv-navbar .brand-highlight {
+        font-size: 17px;
+    }
+
+    .nv-navbar .brand-icon {
+        width: 35px;
+        height: 35px;
+        font-size: 17px;
+    }
+
+    .nv-navbar .brand-subtitle {
+        font-size: 7px;
+    }
+
+    .nv-navbar .nv-actions {
+        gap: 7px;
+    }
+
+    .nv-navbar .nv-profile-dropdown {
+        flex-basis: calc(100% - 45px);
+    }
+
+    .nv-navbar .nv-theme-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .nv-navbar .nv-login-btn,
+    .nv-navbar .nv-register-btn {
+        width: 100%;
+        flex-basis: 100%;
+    }
+}
+</style>

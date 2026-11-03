@@ -1,0 +1,12 @@
+Hello {{ receiver_username }},
+
+{{ sender_username }} would like to connect with you on DevConnect.
+
+Visit the developer profile below to learn more:
+
+{{ profile_url }}
+
+You can review the request from your DevConnect Connections page.
+
+Regards,
+The DevConnect Team

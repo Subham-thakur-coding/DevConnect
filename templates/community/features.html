@@ -1,0 +1,609 @@
+{% extends "base.html" %}
+
+{% block title %}Features | DevConnect{% endblock %}
+
+{% block meta_description %}
+Explore DevConnect features: developer profiles, developer discovery, connections, project showcasing and collaboration.
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .features-page {
+        --fp-text: var(--text, #1e293b);
+        --fp-muted: var(--muted, #64748b);
+        --fp-card: var(--surface, #ffffff);
+        --fp-soft: var(--surface-soft, #f8fafc);
+        --fp-border: var(--border, #e2e8f0);
+        --fp-shadow: var(--shadow, 0 12px 35px rgba(15, 23, 42, .07));
+        color: var(--fp-text);
+        overflow: hidden;
+    }
+
+    .features-hero {
+        position: relative;
+        isolation: isolate;
+        padding: clamp(65px, 9vw, 110px) 0 75px;
+        text-align: center;
+        background:
+            radial-gradient(circle at 15% 15%, rgba(99,102,241,.13), transparent 32%),
+            radial-gradient(circle at 85% 30%, rgba(139,92,246,.13), transparent 30%);
+    }
+
+    .features-hero::before,
+    .features-hero::after {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        width: 230px;
+        height: 230px;
+        border-radius: 50%;
+        filter: blur(75px);
+        opacity: .35;
+        pointer-events: none;
+    }
+
+    .features-hero::before {
+        top: 10px;
+        left: -100px;
+        background: #818cf8;
+    }
+
+    .features-hero::after {
+        right: -100px;
+        bottom: 0;
+        background: #c084fc;
+    }
+
+    .features-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 8px 15px;
+        border: 1px solid rgba(99,102,241,.2);
+        border-radius: 999px;
+        background: rgba(99,102,241,.08);
+        color: #6366f1;
+        font-size: .78rem;
+        font-weight: 800;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+    }
+
+    .features-hero h1 {
+        max-width: 850px;
+        margin: 24px auto 18px;
+        font-size: clamp(2.25rem, 5.5vw, 4.2rem);
+        line-height: 1.12;
+        font-weight: 850;
+        letter-spacing: -.055em;
+    }
+
+    .features-gradient {
+        background: linear-gradient(110deg, #6366f1, #8b5cf6, #a855f7);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .features-hero p {
+        max-width: 680px;
+        margin: 0 auto;
+        color: var(--fp-muted);
+        font-size: clamp(1rem, 2vw, 1.13rem);
+        line-height: 1.8;
+    }
+
+    .features-hero-actions {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 30px;
+    }
+
+    .fp-btn-primary,
+    .fp-btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        min-height: 48px;
+        padding: 12px 21px;
+        border-radius: 13px;
+        text-decoration: none;
+        font-weight: 750;
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .fp-btn-primary {
+        color: #fff;
+        background: linear-gradient(110deg, #6366f1, #8b5cf6);
+        box-shadow: 0 10px 24px rgba(99,102,241,.24);
+    }
+
+    .fp-btn-primary:hover {
+        color: #fff;
+        transform: translateY(-3px);
+        box-shadow: 0 14px 30px rgba(99,102,241,.32);
+    }
+
+    .fp-btn-secondary {
+        color: var(--fp-text);
+        border: 1px solid var(--fp-border);
+        background: var(--fp-card);
+    }
+
+    .fp-btn-secondary:hover {
+        color: #6366f1;
+        transform: translateY(-3px);
+    }
+
+    .features-content {
+        padding: 35px 0 85px;
+    }
+
+    .fp-section-heading {
+        max-width: 690px;
+        margin: 0 auto 38px;
+        text-align: center;
+    }
+
+    .fp-section-heading span {
+        color: #8b5cf6;
+        font-size: .76rem;
+        font-weight: 850;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+    }
+
+    .fp-section-heading h2 {
+        margin: 12px 0;
+        font-size: clamp(1.8rem, 4vw, 2.65rem);
+        font-weight: 850;
+        letter-spacing: -.04em;
+    }
+
+    .fp-section-heading p {
+        margin: 0;
+        color: var(--fp-muted);
+        line-height: 1.75;
+    }
+
+    .fp-feature-card {
+        position: relative;
+        height: 100%;
+        padding: 27px;
+        overflow: hidden;
+        border: 1px solid var(--fp-border);
+        border-radius: 21px;
+        background: var(--fp-card);
+        box-shadow: var(--fp-shadow);
+        transition: transform .22s ease, border-color .22s ease,
+                    box-shadow .22s ease;
+    }
+
+    .fp-feature-card:hover {
+        transform: translateY(-6px);
+        border-color: rgba(139,92,246,.4);
+        box-shadow: 0 20px 45px rgba(99,102,241,.12);
+    }
+
+    .fp-feature-icon {
+        display: grid;
+        width: 55px;
+        height: 55px;
+        place-items: center;
+        margin-bottom: 21px;
+        border-radius: 17px;
+        color: #fff;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        box-shadow: 0 9px 20px rgba(99,102,241,.2);
+        font-size: 1.45rem;
+    }
+
+    .fp-feature-card h3 {
+        margin: 0 0 11px;
+        font-size: 1.16rem;
+        font-weight: 800;
+    }
+
+    .fp-feature-card p {
+        margin: 0;
+        color: var(--fp-muted);
+        font-size: .94rem;
+        line-height: 1.75;
+    }
+
+    .fp-feature-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin-top: 20px;
+        color: #818cf8;
+        font-size: .9rem;
+        font-weight: 750;
+        text-decoration: none;
+    }
+
+    .fp-feature-link:hover {
+        color: #a78bfa;
+        gap: 11px;
+    }
+
+    .fp-how-section {
+        padding: 75px 0;
+        border-top: 1px solid var(--fp-border);
+        border-bottom: 1px solid var(--fp-border);
+        background: var(--fp-soft);
+    }
+
+    .fp-step {
+        display: flex;
+        align-items: flex-start;
+        gap: 17px;
+        height: 100%;
+        padding: 22px;
+        border: 1px solid var(--fp-border);
+        border-radius: 18px;
+        background: var(--fp-card);
+    }
+
+    .fp-step-number {
+        display: grid;
+        flex: 0 0 42px;
+        width: 42px;
+        height: 42px;
+        place-items: center;
+        border-radius: 13px;
+        color: #fff;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        font-weight: 850;
+    }
+
+    .fp-step h3 {
+        margin: 2px 0 7px;
+        font-size: 1rem;
+        font-weight: 800;
+    }
+
+    .fp-step p {
+        margin: 0;
+        color: var(--fp-muted);
+        font-size: .9rem;
+        line-height: 1.65;
+    }
+
+    .fp-cta {
+        padding: 75px 0;
+    }
+
+    .fp-cta-card {
+        position: relative;
+        padding: clamp(30px, 6vw, 60px) 24px;
+        overflow: hidden;
+        border-radius: 27px;
+        color: #fff;
+        text-align: center;
+        background: linear-gradient(120deg, #4f46e5, #7c3aed 65%, #9333ea);
+        box-shadow: 0 22px 55px rgba(99,102,241,.22);
+    }
+
+    .fp-cta-card h2 {
+        max-width: 650px;
+        margin: 0 auto 14px;
+        font-size: clamp(1.8rem, 4vw, 2.7rem);
+        font-weight: 850;
+        letter-spacing: -.04em;
+    }
+
+    .fp-cta-card p {
+        max-width: 590px;
+        margin: 0 auto 25px;
+        color: rgba(255,255,255,.83);
+        line-height: 1.75;
+    }
+
+    .fp-cta-card .fp-btn-primary {
+        color: #5b21b6;
+        background: #fff;
+        box-shadow: none;
+    }
+
+    .fp-cta-card .fp-btn-primary:hover {
+        color: #4c1d95;
+        background: #f5f3ff;
+    }
+
+    @media (max-width: 575.98px) {
+        .features-hero {
+            padding: 55px 0 55px;
+        }
+
+        .features-hero-actions {
+            flex-direction: column;
+        }
+
+        .features-hero-actions a {
+            width: 100%;
+        }
+
+        .fp-feature-card {
+            padding: 23px;
+        }
+
+        .features-content,
+        .fp-how-section,
+        .fp-cta {
+            padding-top: 55px;
+            padding-bottom: 55px;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .fp-feature-card,
+        .fp-btn-primary,
+        .fp-btn-secondary,
+        .fp-feature-link {
+            transition: none;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="features-page">
+
+    <!-- Hero -->
+    <section class="features-hero">
+        <div class="container position-relative">
+
+            <span class="features-eyebrow">
+                <i class="bi bi-stars"></i>
+                Explore DevConnect
+            </span>
+
+            <h1>
+                Everything you need to
+                <span class="features-gradient">grow as a developer.</span>
+            </h1>
+
+            <p>
+                DevConnect brings developers, ideas and projects together.
+                Build your profile, discover talented people, make connections
+                and find opportunities to collaborate.
+            </p>
+
+            <div class="features-hero-actions">
+                <a href="{% url 'developer_directory' %}" class="fp-btn-primary">
+                    <i class="bi bi-people-fill"></i>
+                    Explore Developers
+                </a>
+
+                <a href="{% url 'projects:list' %}" class="fp-btn-secondary">
+                    <i class="bi bi-folder2-open"></i>
+                    Explore Projects
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- Main features -->
+    <section class="features-content">
+        <div class="container">
+
+            <div class="fp-section-heading">
+                <span>What you can do</span>
+                <h2>Tools to help you <span class="features-gradient">move forward.</span></h2>
+                <p>
+                    Discover the tools available in DevConnect to present
+                    your skills, meet developers and work on ideas together.
+                </p>
+            </div>
+
+            <div class="row g-4">
+
+                <!-- Developer Profiles -->
+                <div class="col-md-6 col-lg-4">
+                    <article class="fp-feature-card">
+                        <div class="fp-feature-icon">
+                            <i class="bi bi-person-vcard-fill"></i>
+                        </div>
+                        <h3>Developer Profiles</h3>
+                        <p>
+                            Create your developer identity. Add your bio,
+                            location, skills, profile picture and professional
+                            social links to showcase your background.
+                        </p>
+                        <a href="{% url 'my_profile' %}" class="fp-feature-link">
+                            View your profile <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </article>
+                </div>
+
+                <!-- Developer Directory -->
+                <div class="col-md-6 col-lg-4">
+                    <article class="fp-feature-card">
+                        <div class="fp-feature-icon">
+                            <i class="bi bi-search"></i>
+                        </div>
+                        <h3>Developer Directory</h3>
+                        <p>
+                            Discover other developers, explore their profiles
+                            and find people with skills and interests that
+                            match your goals.
+                        </p>
+                        <a href="{% url 'developer_directory' %}" class="fp-feature-link">
+                            Discover developers <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </article>
+                </div>
+
+                <!-- Connections -->
+                <div class="col-md-6 col-lg-4">
+                    <article class="fp-feature-card">
+                        <div class="fp-feature-icon">
+                            <i class="bi bi-person-hearts"></i>
+                        </div>
+                        <h3>Developer Connections</h3>
+                        <p>
+                            Send connection requests, accept invitations and
+                            build your professional network with other
+                            registered developers.
+                        </p>
+                        <a href="{% url 'my_connections' %}" class="fp-feature-link">
+                            My connections <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </article>
+                </div>
+
+                <!-- Project Showcase -->
+                <div class="col-md-6 col-lg-4">
+                    <article class="fp-feature-card">
+                        <div class="fp-feature-icon">
+                            <i class="bi bi-code-square"></i>
+                        </div>
+                        <h3>Project Showcase</h3>
+                        <p>
+                            Publish your projects with descriptions,
+                            technologies, repository links and live demo
+                            links so others can explore your work.
+                        </p>
+                        <a href="{% url 'projects:list' %}" class="fp-feature-link">
+                            Browse projects <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </article>
+                </div>
+
+                <!-- Project Collaboration -->
+                <div class="col-md-6 col-lg-4">
+                    <article class="fp-feature-card">
+                        <div class="fp-feature-icon">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <h3>Project Collaboration</h3>
+                        <p>
+                            Find projects that interest you and send a request
+                            to join when the project owner is looking for
+                            collaborators.
+                        </p>
+                        <a href="{% url 'projects:list' %}" class="fp-feature-link">
+                            Find opportunities <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </article>
+                </div>
+
+                <!-- My Projects -->
+                <div class="col-md-6 col-lg-4">
+                    <article class="fp-feature-card">
+                        <div class="fp-feature-icon">
+                            <i class="bi bi-kanban-fill"></i>
+                        </div>
+                        <h3>My Projects Workspace</h3>
+                        <p>
+                            Keep track of projects you own, projects you've
+                            joined and incoming collaboration requests
+                            from other developers.
+                        </p>
+                        <a href="{% url 'projects:mine' %}" class="fp-feature-link">
+                            Open My Projects <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </article>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- How it works -->
+    <section class="fp-how-section">
+        <div class="container">
+
+            <div class="fp-section-heading">
+                <span>Getting started</span>
+                <h2>Your developer journey in <span class="features-gradient">three steps.</span></h2>
+                <p>
+                    Start with your profile, discover the community
+                    and take part in projects.
+                </p>
+            </div>
+
+            <div class="row g-4">
+
+                <div class="col-md-4">
+                    <div class="fp-step">
+                        <div class="fp-step-number">01</div>
+                        <div>
+                            <h3>Create your profile</h3>
+                            <p>
+                                Introduce yourself, add your skills
+                                and show the community what you do.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="fp-step">
+                        <div class="fp-step-number">02</div>
+                        <div>
+                            <h3>Discover developers</h3>
+                            <p>
+                                Explore profiles, find people with
+                                shared interests and build connections.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="fp-step">
+                        <div class="fp-step-number">03</div>
+                        <div>
+                            <h3>Explore projects</h3>
+                            <p>
+                                Share your ideas, discover projects
+                                and request to collaborate.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- CTA -->
+    <section class="fp-cta">
+        <div class="container">
+            <div class="fp-cta-card">
+
+                <h2>Ready to build something meaningful?</h2>
+
+                <p>
+                    Join a community where developers can share their work,
+                    discover opportunities and grow together.
+                </p>
+
+                {% if request.user.is_authenticated %}
+                    <a href="{% url 'my_profile' %}" class="fp-btn-primary">
+                        <i class="bi bi-person-circle"></i>
+                        Go to My Profile
+                    </a>
+                {% else %}
+                    <a href="{% url 'auth:register' %}" class="fp-btn-primary">
+                        <i class="bi bi-rocket-takeoff-fill"></i>
+                        Join DevConnect
+                    </a>
+                {% endif %}
+
+            </div>
+        </div>
+    </section>
+
+</div>
+{% endblock %}

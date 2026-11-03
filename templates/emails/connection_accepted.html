@@ -1,0 +1,36 @@
+{% extends "emails/base_email.html" %}
+
+{% block email_content %}
+
+<h2 style="color:#111827; font-size:23px;">
+    Your Connection Request Was Accepted!
+</h2>
+
+<p style="color:#4b5563;">
+    Hello {{ sender_username }},
+</p>
+
+<p style="color:#4b5563;">
+    Great news! <strong>{{ receiver_username }}</strong>
+    has accepted your connection request.
+</p>
+
+<p style="color:#4b5563;">
+    You are now connected on DevConnect. Start building
+    professional relationships and exploring collaboration
+    opportunities.
+</p>
+
+<p style="text-align:center; margin:30px 0;">
+    <a href="{{ profile_url }}"
+       style="display:inline-block; padding:14px 28px; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#ffffff; text-decoration:none; border-radius:8px; font-weight:bold;">
+        View Developer Profile
+    </a>
+</p>
+
+<p style="color:#4b5563;">
+    Happy connecting!<br>
+    <strong>The DevConnect Team</strong>
+</p>
+
+{% endblock %}

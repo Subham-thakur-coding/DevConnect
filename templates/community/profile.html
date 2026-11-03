@@ -1,0 +1,484 @@
+{% extends "community/auth/base.html" %}
+
+{% block title %}My Developer Profile | NetVibe DevConnect{% endblock %}
+
+{% block auth_content %}
+
+<style>
+
+    .profile-page {
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+        color: var(--text);
+    }
+
+    .profile-card {
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+    }
+
+    .profile-cover {
+        height: 170px;
+        position: relative;
+        background: linear-gradient(120deg, #4f46e5, #7c3aed, #a855f7);
+    }
+
+    .profile-cover::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(circle at 20% 20%, rgba(255,255,255,.18), transparent 35%),
+            radial-gradient(circle at 85% 70%, rgba(255,255,255,.15), transparent 30%);
+    }
+
+    .profile-main {
+        padding: 0 32px 32px;
+    }
+
+    .profile-avatar-wrap {
+        position: relative;
+        width: 112px;
+        height: 112px;
+        margin-top: -56px;
+        z-index: 2;
+    }
+
+    .profile-avatar {
+        width: 112px;
+        height: 112px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border: 5px solid var(--surface);
+        border-radius: 50%;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: #fff;
+        font-size: 38px;
+        font-weight: 800;
+    }
+
+    .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .profile-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 28px;
+    }
+
+    .profile-name {
+        margin: 14px 0 5px;
+        color: var(--text);
+        font-size: clamp(1.5rem, 4vw, 2rem);
+        font-weight: 800;
+        overflow-wrap: anywhere;
+    }
+
+    .profile-username,
+    .profile-location {
+        color: var(--muted);
+        overflow-wrap: anywhere;
+    }
+
+    .profile-location {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin-top: 12px;
+        font-size: .92rem;
+    }
+
+    .profile-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 11px 17px;
+        border: 0;
+        border-radius: 12px;
+        background: var(--gradient);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 700;
+        transition: transform .2s, box-shadow .2s;
+    }
+
+    .profile-button:hover {
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(99, 102, 241, .25);
+    }
+
+    .profile-section {
+        margin-top: 24px;
+        padding: 22px;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        background: var(--surface-soft);
+    }
+
+    .profile-section-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+        color: var(--text);
+        font-size: 1.05rem;
+        font-weight: 800;
+    }
+
+    .profile-section-icon {
+        width: 36px;
+        height: 36px;
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+        border-radius: 11px;
+        background: rgba(99, 102, 241, .14);
+        color: var(--primary);
+    }
+
+    .profile-bio {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.8;
+        overflow-wrap: anywhere;
+        white-space: pre-line;
+    }
+
+    .skill-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+    }
+
+    .skill-tag {
+        padding: 8px 12px;
+        border: 1px solid rgba(129, 140, 248, .35);
+        border-radius: 999px;
+        background: rgba(99, 102, 241, .12);
+        color: var(--primary);
+        font-size: .88rem;
+        font-weight: 700;
+        overflow-wrap: anywhere;
+    }
+
+    .profile-links {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .profile-link {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        min-width: 0;
+        padding: 14px;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        background: var(--surface);
+        color: var(--text);
+        text-decoration: none;
+        transition: border-color .2s, transform .2s;
+    }
+
+    .profile-link:hover {
+        transform: translateY(-2px);
+        border-color: var(--primary);
+        color: var(--text);
+    }
+
+    .profile-link i {
+        flex-shrink: 0;
+        font-size: 1.4rem;
+        color: var(--primary);
+    }
+
+    .profile-link span {
+        min-width: 0;
+        font-weight: 700;
+        overflow-wrap: anywhere;
+    }
+
+    .profile-empty {
+        color: var(--muted);
+        font-size: .94rem;
+    }
+
+    .profile-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+
+    @media (max-width: 640px) {
+        .profile-main {
+            padding: 0 16px 20px;
+        }
+
+        .profile-cover {
+            height: 125px;
+        }
+
+        .profile-avatar-wrap {
+            width: 94px;
+            height: 94px;
+            margin-top: -47px;
+        }
+
+        .profile-avatar {
+            width: 94px;
+            height: 94px;
+            font-size: 30px;
+        }
+
+        .profile-header {
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .profile-name {
+            font-size: clamp(1.4rem, 6vw, 1.8rem);
+        }
+
+        .profile-actions,
+        .profile-actions .profile-button {
+            width: 100%;
+        }
+
+        .profile-links {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .profile-section {
+            margin-top: 18px;
+            padding: 16px;
+        }
+
+        .profile-link {
+            padding: 12px;
+        }
+    }
+
+    @media (max-width: 360px) {
+        .profile-main {
+            padding-right: 12px;
+            padding-left: 12px;
+        }
+
+        .profile-section {
+            padding: 13px;
+        }
+
+        .profile-button {
+            padding: 10px 12px;
+            font-size: .9rem;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .profile-button,
+        .profile-link {
+            transition: none;
+        }
+
+        .profile-button:hover,
+        .profile-link:hover {
+            transform: none;
+        }
+    }
+
+</style>
+
+<div class="profile-page">
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show rounded-4" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="profile-card">
+
+        <div class="profile-cover"></div>
+
+        <div class="profile-main">
+
+            <div class="profile-avatar-wrap">
+                <div class="profile-avatar">
+                    {% if profile.profile_picture %}
+                        <img
+                            src="{{ profile.profile_picture }}"
+                            alt="{{ profile.user.username }}'s profile picture"
+                            referrerpolicy="no-referrer"
+                        >
+                    {% else %}
+                        {{ profile.user.username|first|upper }}
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="profile-header">
+
+                <div>
+                    <h1 class="profile-name">
+                        {{ profile.user.get_full_name|default:profile.user.username }}
+                    </h1>
+
+                    <div class="profile-username">
+                        @{{ profile.user.username }}
+                    </div>
+
+                    {% if profile.location %}
+                        <div class="profile-location">
+                            <i class="bi bi-geo-alt-fill"></i>
+                            {{ profile.location }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="profile-actions">
+                    <a href="{% url 'edit_profile' %}" class="profile-button">
+                        <i class="bi bi-pencil-square"></i>
+                        Edit Profile
+                    </a>
+                </div>
+
+            </div>
+
+            <section class="profile-section">
+
+                <h2 class="profile-section-title">
+                    <span class="profile-section-icon">
+                        <i class="bi bi-person-lines-fill"></i>
+                    </span>
+                    About Me
+                </h2>
+
+                {% if profile.bio %}
+                    <p class="profile-bio">{{ profile.bio }}</p>
+                {% else %}
+                    <p class="profile-empty">
+                        You haven't added your bio yet.
+                        <a href="{% url 'edit_profile' %}">Tell the community about yourself.</a>
+                    </p>
+                {% endif %}
+
+            </section>
+
+            <section class="profile-section">
+
+                <h2 class="profile-section-title">
+                    <span class="profile-section-icon">
+                        <i class="bi bi-code-slash"></i>
+                    </span>
+                    Technical Skills
+                </h2>
+
+                {% if profile.skills %}
+                    <div class="skill-list">
+                    {% for skill in profile.get_skills_list %}
+                        <span class="skill-tag">{{ skill }}</span>
+                    {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="profile-empty">
+                        No skills added yet.
+                        <a href="{% url 'edit_profile' %}">Add your technical skills.</a>
+                    </p>
+                {% endif %}
+
+            </section>
+
+            <section class="profile-section">
+
+                <h2 class="profile-section-title">
+                    <span class="profile-section-icon">
+                        <i class="bi bi-link-45deg"></i>
+                    </span>
+                    Professional Links
+                </h2>
+
+                <div class="profile-links">
+
+                    {% if profile.github_url %}
+                        <a
+                            href="{{ profile.github_url }}"
+                            class="profile-link"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <i class="bi bi-github"></i>
+                            <span>GitHub</span>
+                        </a>
+                    {% endif %}
+
+                    {% if profile.linkedin_url %}
+                        <a
+                            href="{{ profile.linkedin_url }}"
+                            class="profile-link"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <i class="bi bi-linkedin"></i>
+                            <span>LinkedIn</span>
+                        </a>
+                    {% endif %}
+
+                    {% if profile.portfolio_url %}
+                        <a
+                            href="{{ profile.portfolio_url }}"
+                            class="profile-link"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <i class="bi bi-globe2"></i>
+                            <span>Portfolio</span>
+                        </a>
+                    {% endif %}
+
+                </div>
+
+                {% if not profile.github_url and not profile.linkedin_url and not profile.portfolio_url %}
+                    <p class="profile-empty mb-0">
+                        Add your GitHub, LinkedIn, or portfolio link to showcase your work.
+                    </p>
+                {% endif %}
+
+            </section>
+
+            <div class="mt-4 d-flex flex-wrap justify-content-between gap-2">
+                <small class="profile-empty">
+                    <i class="bi bi-calendar3 me-1"></i>
+                    Member since {{ profile.created_at|date:"M Y" }}
+                </small>
+
+                <small class="profile-empty">
+                    <i class="bi bi-shield-check me-1"></i>
+                    Your DevConnect profile
+                </small>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

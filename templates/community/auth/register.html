@@ -1,0 +1,112 @@
+{% extends "community/auth/base.html" %}
+
+{% block title %}Create Account | NetVibe DevConnect{% endblock %}
+
+{% block auth_content %}
+<section class="auth-card">
+
+    <div class="auth-icon">
+        <i class="bi bi-person-plus-fill"></i>
+    </div>
+
+    <h1>Create your account</h1>
+
+    <p class="auth-subtitle">
+        Join NetVibe DevConnect and start connecting with developers.
+    </p>
+
+    <form method="post" action="{% url 'auth:register' %}">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="error-box">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <div class="field-group">
+            <label for="{{ form.username.id_for_label }}" class="form-label">
+                Username
+            </label>
+
+            {{ form.username }}
+
+            {% for error in form.username.errors %}
+                <div class="text-danger small mt-2">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="field-group">
+            <label for="{{ form.email.id_for_label }}" class="form-label">
+                Email address
+            </label>
+
+            {{ form.email }}
+
+            {% for error in form.email.errors %}
+                <div class="text-danger small mt-2">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="field-group">
+            <label for="{{ form.password1.id_for_label }}" class="form-label">
+                Password
+            </label>
+
+            <input
+                type="password"
+                name="{{ form.password1.html_name }}"
+                id="{{ form.password1.id_for_label }}"
+                class="form-control"
+                placeholder="Create a strong password"
+                autocomplete="new-password"
+                required
+            >
+
+            {% for error in form.password1.errors %}
+                <div class="text-danger small mt-2">{{ error }}</div>
+            {% endfor %}
+
+            <div class="form-text mt-2">
+                Use a password that meets Django's configured validation rules.
+            </div>
+        </div>
+
+        <div class="field-group">
+            <label for="{{ form.password2.id_for_label }}" class="form-label">
+                Confirm password
+            </label>
+
+            <input
+                type="password"
+                name="{{ form.password2.html_name }}"
+                id="{{ form.password2.id_for_label }}"
+                class="form-control"
+                placeholder="Enter your password again"
+                autocomplete="new-password"
+                required
+            >
+
+            {% for error in form.password2.errors %}
+                <div class="text-danger small mt-2">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="btn auth-button">
+            Create Account
+            <i class="bi bi-arrow-right"></i>
+        </button>
+    </form>
+
+    <div class="security-note">
+        <i class="bi bi-shield-check"></i>
+        Your password is handled by Django's authentication system.
+    </div>
+
+    <p class="auth-switch">
+        Already have an account?
+        <a href="{% url 'auth:login' %}">Sign in</a>
+    </p>
+
+</section>
+{% endblock %}

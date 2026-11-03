@@ -1,0 +1,42 @@
+{% extends "emails/base_email.html" %}
+
+{% block email_content %}
+
+<h2 style="color:#111827; font-size:23px;">
+    New Project Join Request!
+</h2>
+
+<p style="color:#4b5563;">
+    Hello {{ owner_username }},
+</p>
+
+<p style="color:#4b5563;">
+    <strong>{{ applicant_username }}</strong> wants to join your project:
+</p>
+
+<div style="padding:18px; margin:22px 0; background:#f5f3ff; border-radius:12px; border-left:4px solid #6366f1;">
+    <h3 style="margin:0; color:#6366f1; font-size:19px;">
+        {{ project_title }}
+    </h3>
+    <p style="margin:7px 0 0; color:#6b7280;">
+        A developer is interested in collaborating with your team.
+    </p>
+</div>
+
+<p style="text-align:center; margin:30px 0;">
+    <a href="{{ management_url }}"
+       style="display:inline-block; padding:14px 28px; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#ffffff; text-decoration:none; border-radius:8px; font-weight:bold;">
+        Review Join Request
+    </a>
+</p>
+
+<p style="color:#6b7280; font-size:13px;">
+    You can accept or reject the request from your My Projects page.
+</p>
+
+<p style="color:#4b5563;">
+    Regards,<br>
+    <strong>The DevConnect Team</strong>
+</p>
+
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "emails/base_email.html" %}
+
+{% block email_content %}
+
+<h2 style="color:#111827; font-size:23px;">
+    Welcome to the Project Team!
+</h2>
+
+<p style="color:#4b5563;">
+    Hello {{ applicant_username }},
+</p>
+
+<p style="color:#4b5563;">
+    Great news! <strong>{{ owner_username }}</strong> has accepted
+    your request to join the following project:
+</p>
+
+<div style="padding:18px; margin:22px 0; background:#f0fdf4; border-radius:12px; border-left:4px solid #10b981;">
+    <h3 style="margin:0; color:#059669; font-size:19px;">
+        {{ project_title }}
+    </h3>
+    <p style="margin:7px 0 0; color:#4b5563;">
+        You are now an accepted member of this project.
+    </p>
+</div>
+
+<p style="color:#4b5563;">
+    You can now visit the project page and start collaborating
+    with the team.
+</p>
+
+<p style="text-align:center; margin:30px 0;">
+    <a href="{{ project_url }}"
+       style="display:inline-block; padding:14px 28px; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#ffffff; text-decoration:none; border-radius:8px; font-weight:bold;">
+        Explore Project
+    </a>
+</p>
+
+<p style="color:#4b5563;">
+    Happy building!<br>
+    <strong>The DevConnect Team</strong>
+</p>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "emails/base_email.txt" %}
+
+{% block email_content %}
+
+Welcome to DevConnect, {{ username }}!
+
+We're excited to have you as part of our developer community.
+
+DevConnect is a place where developers connect, share ideas,
+collaborate on projects, and grow together.
+
+WHAT YOU CAN DO ON DEVCONNECT
+
+- Discover developers and connect with them.
+- Create projects and collaborate with other developers.
+- Build your professional developer network.
+- Share your skills and grow your experience.
+
+Your journey starts here!
+
+{% if site_url %}
+Explore DevConnect:
+{{ site_url }}
+{% endif %}
+
+Happy building!
+
+The DevConnect Team
+
+{% endblock %}

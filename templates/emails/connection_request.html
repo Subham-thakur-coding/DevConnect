@@ -1,0 +1,39 @@
+{% extends "emails/base_email.html" %}
+
+{% block email_content %}
+
+<h2 style="color:#111827; font-size:23px;">
+    New Connection Request!
+</h2>
+
+<p style="color:#4b5563;">
+    Hello {{ receiver_username }},
+</p>
+
+<p style="color:#4b5563;">
+    <strong>{{ sender_username }}</strong> would like to connect
+    with you on DevConnect.
+</p>
+
+<p style="color:#4b5563;">
+    Connect with other developers, share knowledge and collaborate
+    on exciting projects.
+</p>
+
+<p style="text-align:center; margin:30px 0;">
+    <a href="{{ profile_url }}"
+       style="display:inline-block; padding:14px 28px; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#ffffff; text-decoration:none; border-radius:8px; font-weight:bold;">
+        View Developer Profile
+    </a>
+</p>
+
+<p style="color:#6b7280; font-size:13px;">
+    You can review the request from your DevConnect Connections page.
+</p>
+
+<p style="color:#4b5563;">
+    Regards,<br>
+    <strong>The DevConnect Team</strong>
+</p>
+
+{% endblock %}

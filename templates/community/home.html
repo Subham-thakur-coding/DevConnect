@@ -1,0 +1,846 @@
+﻿{% extends "base.html" %}
+
+{% block title %}DevConnect | Developer Community{% endblock %}
+
+{% block meta_description %}
+DevConnect is a community for developers to showcase projects, discover talent, share knowledge, and grow together.
+{% endblock %}
+
+{% block extra_css %}
+<style>
+        .hero-visual {
+            position: relative;
+            isolation: isolate;
+            width: 100%;
+            max-width: 100%;
+            padding: clamp(8px, 2vw, 18px);
+        }
+
+        .hero-visual .decorative-code-window {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            overflow: hidden;
+            border: 1px solid rgba(139, 92, 246, 0.28);
+            border-radius: 24px;
+            background: var(--card-bg, #111827);
+            box-shadow:
+                0 28px 70px rgba(31, 41, 55, 0.18),
+                0 8px 24px rgba(99, 102, 241,  0.12),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            transform: translateZ(0);
+            transition: border-color 220ms ease, box-shadow 220ms ease,
+                        transform 220ms ease;
+        }
+
+        .hero-visual .decorative-code-window:hover {
+            border-color: rgba(139, 92, 246, 0.55);
+            box-shadow:
+                0 32px 78px rgba(31, 41, 55, 0.22),
+                0 10px 30px rgba(99, 102, 241, 0.17),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            transform: translateY(-3px);
+        }
+
+        .hero-visual .decorative-code-window .code-window-header {
+            border-radius: 23px 23px 0 0;
+        }
+
+        .hero-visual .decorative-code-window .code-content {
+            overflow-x: auto;
+            overscroll-behavior-x: contain;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(139, 92, 246, 0.72) rgba(148, 163, 184, 0.10);
+            scrollbar-gutter: stable;
+        }
+
+        /* Slim, rounded scrollbar that matches the indigo-purple theme */
+        .hero-visual .decorative-code-window .code-content::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .hero-visual .decorative-code-window .code-content::-webkit-scrollbar-track {
+            background: rgba(148, 163, 184, 0.10);
+            border-radius: 999px;
+            margin: 0 14px 5px;
+        }
+
+        .hero-visual .decorative-code-window .code-content::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 999px;
+        }
+
+        .hero-visual .decorative-code-window .code-content::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(90deg, #4f46e5, #7c3aed);
+        }
+
+        .hero-visual .decorative-code-window .code-content::-webkit-scrollbar-corner {
+            background: transparent;
+        }
+
+        .hero-visual .decorative-code-window .code-window-footer {
+            border-radius: 0 0 23px 23px;
+        }
+
+        .hero-visual .floating-tag {
+            position: absolute;
+            z-index: 2;
+            max-width: calc(100% - 16px);
+            border: 1px solid rgba(139, 92, 246, 0.18);
+            border-radius: 999px;
+            box-shadow: 0 12px 30px rgba(31, 41, 55, 0.12);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+
+        .hero-visual .tag-top {
+            top: 0;
+            right: 0;
+        }
+
+        .hero-visual .tag-bottom {
+            bottom: 0;
+            left: 0;
+        }
+
+        @media (max-width: 991.98px) {
+            .hero-visual {
+                max-width: 620px;
+                margin: 0 auto;
+            }
+
+            .hero-visual .decorative-code-window {
+                border-radius: 22px;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .hero-visual {
+                padding: 14px 4px 18px;
+            }
+
+            .hero-visual .decorative-code-window {
+                border-radius: 18px;
+            }
+
+            .hero-visual .decorative-code-window .code-window-header {
+                border-radius: 17px 17px 0 0;
+            }
+
+            .hero-visual .decorative-code-window .code-window-footer {
+                border-radius: 0 0 17px 17px;
+            }
+
+            .hero-visual .decorative-code-window .code-content {
+                padding-left: 12px;
+                padding-right: 12px;
+                font-size: 0.82rem;
+            }
+
+            .hero-visual .floating-tag {
+                font-size: 0.76rem;
+                padding: 8px 12px;
+            }
+
+            .hero-visual .tag-top {
+                right: 2px;
+            }
+
+            .hero-visual .tag-bottom {
+                left: 2px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hero-visual .decorative-code-window {
+                transition: none;
+            }
+
+            .hero-visual .decorative-code-window:hover {
+                transform: none;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<section class="hero-section" id="home">
+            <div class="hero-orb hero-orb-one"></div>
+            <div class="hero-orb hero-orb-two"></div>
+
+            <div class="container position-relative">
+                <div class="row align-items-center g-5">
+
+                    <div class="col-lg-7">
+
+                        <div class="eyebrow">
+                            <span class="live-dot"></span>
+                            YOUR NEXT CHAPTER STARTS HERE
+                        </div>
+
+                        <h1 class="hero-title">
+                            Where developers
+                            <span class="gradient-text">connect, create</span>
+                            and grow together.
+                        </h1>
+
+                        <p class="hero-description">
+                            Meet developers, showcase what you build, discover
+                            exciting projects, and learn alongside a community
+                            that believes in growing together.
+                        </p>
+
+                        <div class="d-flex flex-column flex-sm-row gap-3 mt-4">
+
+                            <a href="#projects" class="btn btn-primary-gradient btn-lg">
+                                Explore projects
+                                <i class="bi bi-arrow-right ms-2"></i>
+                            </a>
+
+                            <a href="#developers" class="btn btn-outline-custom btn-lg">
+                                <i class="bi bi-people me-2"></i>
+                                Discover developers
+                            </a>
+
+                        </div>
+
+                        <div class="hero-trust mt-4">
+                            <span><i class="bi bi-check-circle-fill"></i> Showcase your work</span>
+                            <span><i class="bi bi-check-circle-fill"></i> Learn together</span>
+                            <span><i class="bi bi-check-circle-fill"></i> Build connections</span>
+                        </div>
+
+                    </div>
+
+
+                    <!-- Decorative Developer Card -->
+                    <div class="col-lg-5">
+
+                        <div class="hero-visual">
+
+                            <div class="floating-tag tag-top">
+                                <i class="bi bi-lightning-charge-fill"></i>
+                                Ideas into reality
+                            </div>
+
+                            <div class="code-window decorative-code-window">
+
+                                <div class="code-window-header">
+                                    <div class="window-dots">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                    </div>
+
+                                    <span class="window-filename">
+                                        developer.py
+                                    </span>
+
+                                    <i class="bi bi-three-dots"></i>
+                                </div>
+
+                                <div class="code-content">
+                                    <div class="code-line">
+                                        <span class="line-number">01</span>
+                                        <span>
+                                            <span class="code-purple">class</span>
+                                            <span class="code-yellow">Developer</span>:
+                                        </span>
+                                    </div>
+
+                                    <div class="code-line">
+                                        <span class="line-number">02</span>
+                                        <span class="indent">
+                                            <span class="code-purple">def</span>
+                                            <span class="code-blue">__init__</span>(self):
+                                        </span>
+                                    </div>
+
+                                    <div class="code-line">
+                                        <span class="line-number">03</span>
+                                        <span class="indent-2">
+                                            self.skills = [
+                                            <span class="code-green">"Python"</span>,
+                                        </span>
+                                    </div>
+
+                                    <div class="code-line">
+                                        <span class="line-number">04</span>
+                                        <span class="indent-2">
+                                            <span class="code-green">"Web Dev"</span>
+                                            ]
+                                        </span>
+                                    </div>
+
+                                    <div class="code-line">
+                                        <span class="line-number">05</span>
+                                        <span class="indent-2">
+                                            self.community =
+                                            <span class="code-green">"DevConnect"</span>
+                                        </span>
+                                    </div>
+
+                                    <div class="code-line">
+                                        <span class="line-number">06</span>
+                                        <span class="indent">
+                                            <span class="code-purple">def</span>
+                                            <span class="code-blue">build</span>(self):
+                                        </span>
+                                    </div>
+
+                                    <div class="code-line">
+                                        <span class="line-number">07</span>
+                                        <span class="indent-2">
+                                            <span class="code-purple">return</span>
+                                            <span class="code-green">"Something amazing!"</span>
+                                        </span>
+                                    </div>
+
+                                    <div class="code-line">
+                                        <span class="line-number">08</span>
+                                        <span class="cursor-block"></span>
+                                    </div>
+                                </div>
+
+                                <div class="code-window-footer">
+                                    <span>
+                                        <i class="bi bi-circle-fill text-success"></i>
+                                        Ready to build
+                                    </span>
+
+                                    <span>UTF-8 Â· Python</span>
+                                </div>
+
+                            </div>
+
+                            <div class="floating-tag tag-bottom">
+                                <i class="bi bi-code-square"></i>
+                                Build something meaningful
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Value Proposition -->
+        <section class="value-strip">
+            <div class="container">
+
+                <div class="row g-4">
+
+                    <div class="col-md-4">
+                        <div class="value-item">
+                            <div class="value-icon purple-icon">
+                                <i class="bi bi-person-workspace"></i>
+                            </div>
+
+                            <div>
+                                <h3>Find your people</h3>
+                                <p>Connect with developers who share your interests.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="value-item">
+                            <div class="value-icon blue-icon">
+                                <i class="bi bi-window-stack"></i>
+                            </div>
+
+                            <div>
+                                <h3>Show what you build</h3>
+                                <p>Give your projects a place in the spotlight.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="value-item">
+                            <div class="value-icon green-icon">
+                                <i class="bi bi-graph-up-arrow"></i>
+                            </div>
+
+                            <div>
+                                <h3>Keep growing</h3>
+                                <p>Learn new skills and share your experience.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- Developers Section -->
+        <section class="content-section" id="developers">
+            <div class="container">
+
+                <div class="section-heading">
+                    <div>
+                        <span class="section-label">THE COMMUNITY</span>
+
+                        <h2>
+                            Meet your
+                            <span class="gradient-text">future collaborators.</span>
+                        </h2>
+
+                        <p>
+                            A place for curious minds, creative builders,
+                            and developers who want to go further.
+                        </p>
+                    </div>
+
+                    <a href="#join" class="section-link">
+                        Discover the community
+                        <i class="bi bi-arrow-up-right"></i>
+                    </a>
+                </div>
+
+
+                <div class="row g-4">
+
+                    <div class="col-md-6 col-lg-4">
+                        <article class="developer-card">
+
+                            <div class="developer-top">
+                                <div class="avatar avatar-purple">
+                                    <i class="bi bi-code-slash"></i>
+                                </div>
+
+                                <span class="status-badge">
+                                    <span class="status-dot"></span>
+                                    Developer
+                                </span>
+                            </div>
+
+                            <h3>Python Developer</h3>
+
+                            <p>
+                                Build backend applications, APIs, and
+                                useful tools with Python and Django.
+                            </p>
+
+                            <div class="skill-list">
+                                <span>Python</span>
+                                <span>Django</span>
+                                <span>SQL</span>
+                            </div>
+
+                            <div class="developer-card-footer">
+                                <span><i class="bi bi-person-badge"></i> Backend Development</span>
+                                <i class="bi bi-arrow-up-right"></i>
+                            </div>
+
+                        </article>
+                    </div>
+
+
+                    <div class="col-md-6 col-lg-4">
+                        <article class="developer-card">
+
+                            <div class="developer-top">
+                                <div class="avatar avatar-blue">
+                                    <i class="bi bi-palette"></i>
+                                </div>
+
+                                <span class="status-badge">
+                                    <span class="status-dot"></span>
+                                    Designer
+                                </span>
+                            </div>
+
+                            <h3>Frontend Developer</h3>
+
+                            <p>
+                                Turn ideas into engaging interfaces
+                                with responsive and accessible design.
+                            </p>
+
+                            <div class="skill-list">
+                                <span>HTML</span>
+                                <span>CSS</span>
+                                <span>JavaScript</span>
+                            </div>
+
+                            <div class="developer-card-footer">
+                                <span><i class="bi bi-window"></i> Frontend Development</span>
+                                <i class="bi bi-arrow-up-right"></i>
+                            </div>
+
+                        </article>
+                    </div>
+
+
+                    <div class="col-md-6 col-lg-4">
+                        <article class="developer-card">
+
+                            <div class="developer-top">
+                                <div class="avatar avatar-green">
+                                    <i class="bi bi-cpu"></i>
+                                </div>
+
+                                <span class="status-badge">
+                                    <span class="status-dot"></span>
+                                    AI Enthusiast
+                                </span>
+                            </div>
+
+                            <h3>AI &amp; ML Developer</h3>
+
+                            <p>
+                                Explore intelligent applications,
+                                automation, and machine learning.
+                            </p>
+
+                            <div class="skill-list">
+                                <span>Python</span>
+                                <span>AI</span>
+                                <span>Data</span>
+                            </div>
+
+                            <div class="developer-card-footer">
+                                <span><i class="bi bi-stars"></i> AI Development</span>
+                                <i class="bi bi-arrow-up-right"></i>
+                            </div>
+
+                        </article>
+                    </div>
+
+                </div>
+
+                <p class="demo-notice mt-3">
+                    <i class="bi bi-info-circle me-1"></i>
+                    These are illustrative examples, not registered member profiles.
+                </p>
+
+            </div>
+        </section>
+
+
+        <!-- Projects Section -->
+        <section class="content-section projects-section" id="projects">
+            <div class="container">
+
+                <div class="section-heading">
+                    <div>
+                        <span class="section-label">MADE BY DEVELOPERS</span>
+
+                        <h2>
+                            Ideas worth
+                            <span class="gradient-text">building.</span>
+                        </h2>
+
+                        <p>
+                            Get inspired by the kinds of projects you can
+                            share and discover on DevConnect.
+                        </p>
+                    </div>
+
+                    <a href="#join" class="section-link">
+                        Explore opportunities
+                        <i class="bi bi-arrow-up-right"></i>
+                    </a>
+                </div>
+
+
+                <div class="row g-4">
+
+                    <div class="col-md-6 col-lg-4">
+                        <article class="project-card">
+
+                            <div class="project-art art-purple">
+                                <div class="project-art-icon">
+                                    <i class="bi bi-speedometer2"></i>
+                                </div>
+
+                                <span class="project-type">WEB APPLICATION</span>
+                            </div>
+
+                            <div class="project-body">
+
+                                <div class="project-heading">
+                                    <h3>Developer Dashboard</h3>
+
+                                    <span class="project-arrow">
+                                        <i class="bi bi-arrow-up-right"></i>
+                                    </span>
+                                </div>
+
+                                <p>
+                                    A responsive dashboard for managing
+                                    information and tracking progress.
+                                </p>
+
+                                <div class="skill-list">
+                                    <span>Django</span>
+                                    <span>Bootstrap</span>
+                                    <span>SQLite</span>
+                                </div>
+
+                                <div class="project-footer">
+                                    <span><i class="bi bi-code-square"></i> Full Stack</span>
+                                    <span><i class="bi bi-lightbulb"></i> Learning Project</span>
+                                </div>
+
+                            </div>
+                        </article>
+                    </div>
+
+
+                    <div class="col-md-6 col-lg-4">
+                        <article class="project-card">
+
+                            <div class="project-art art-blue">
+                                <div class="project-art-icon">
+                                    <i class="bi bi-robot"></i>
+                                </div>
+
+                                <span class="project-type">AI APPLICATION</span>
+                            </div>
+
+                            <div class="project-body">
+
+                                <div class="project-heading">
+                                    <h3>AI Study Assistant</h3>
+
+                                    <span class="project-arrow">
+                                        <i class="bi bi-arrow-up-right"></i>
+                                    </span>
+                                </div>
+
+                                <p>
+                                    An educational application concept
+                                    for organizing study resources.
+                                </p>
+
+                                <div class="skill-list">
+                                    <span>Python</span>
+                                    <span>AI</span>
+                                    <span>APIs</span>
+                                </div>
+
+                                <div class="project-footer">
+                                    <span><i class="bi bi-cpu"></i> AI Development</span>
+                                    <span><i class="bi bi-lightbulb"></i> Learning Project</span>
+                                </div>
+
+                            </div>
+                        </article>
+                    </div>
+
+
+                    <div class="col-md-6 col-lg-4">
+                        <article class="project-card">
+
+                            <div class="project-art art-green">
+                                <div class="project-art-icon">
+                                    <i class="bi bi-kanban"></i>
+                                </div>
+
+                                <span class="project-type">PRODUCTIVITY TOOL</span>
+                            </div>
+
+                            <div class="project-body">
+
+                                <div class="project-heading">
+                                    <h3>Project Workspace</h3>
+
+                                    <span class="project-arrow">
+                                        <i class="bi bi-arrow-up-right"></i>
+                                    </span>
+                                </div>
+
+                                <p>
+                                    A project management concept for
+                                    organizing tasks and team workflows.
+                                </p>
+
+                                <div class="skill-list">
+                                    <span>JavaScript</span>
+                                    <span>HTML</span>
+                                    <span>CSS</span>
+                                </div>
+
+                                <div class="project-footer">
+                                    <span><i class="bi bi-window"></i> Web Development</span>
+                                    <span><i class="bi bi-lightbulb"></i> Learning Project</span>
+                                </div>
+
+                            </div>
+                        </article>
+                    </div>
+
+                </div>
+
+                <p class="demo-notice mt-3">
+                    <i class="bi bi-info-circle me-1"></i>
+                    These are sample project cards. Real community projects will be connected later.
+                </p>
+
+            </div>
+        </section>
+
+
+        <!-- Features Section -->
+        <section class="content-section features-section" id="features">
+            <div class="container">
+
+                <div class="section-heading text-center justify-content-center">
+                    <div>
+                        <span class="section-label">WHY DEVCONNECT?</span>
+
+                        <h2>
+                            More than a profile.
+                            <span class="gradient-text">A community.</span>
+                        </h2>
+
+                        <p class="mx-auto">
+                            Everything starts with a place where developers
+                            can share ideas and learn from one another.
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="row g-4 mt-2">
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="bi bi-person-lines-fill"></i>
+                            </div>
+
+                            <h3>Developer Profiles</h3>
+
+                            <p>
+                                Showcase your skills, interests,
+                                experience, and social links.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="bi bi-folder2-open"></i>
+                            </div>
+
+                            <h3>Project Showcase</h3>
+
+                            <p>
+                                Present your work and share
+                                the technologies you use.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="bi bi-chat-square-text"></i>
+                            </div>
+
+                            <h3>Community Posts</h3>
+
+                            <p>
+                                Share learning experiences,
+                                ideas, and technical discussions.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="bi bi-search"></i>
+                            </div>
+
+                            <h3>Discover &amp; Learn</h3>
+
+                            <p>
+                                Explore technologies, projects,
+                                and people with similar interests.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- Join Section -->
+        <section class="join-section" id="join">
+            <div class="container">
+
+                <div class="join-card">
+
+                    <div class="join-decoration join-decoration-one"></div>
+                    <div class="join-decoration join-decoration-two"></div>
+
+                    <div class="join-content">
+
+                        <span class="section-label join-label">
+                            YOUR JOURNEY STARTS HERE
+                        </span>
+
+                        <h2>
+                            Your next great idea
+                            starts with a connection.
+                        </h2>
+
+                        <p>
+                            Build your skills, share your work,
+                            and become part of the developer community.
+                        </p>
+
+{% if request.user.is_authenticated %}
+
+    <a href="{% url 'my_profile' %}" class="btn btn-join">
+        View My Profile
+        <i class="bi bi-person-circle ms-2"></i>
+    </a>
+
+    <small class="join-note">
+        Welcome back! Continue building your developer profile.
+    </small>
+
+{% else %}
+
+        <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+
+            <a href="{% url 'auth:register' %}" class="btn btn-join">
+                Create Your Account
+                <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+
+            <a href="{% url 'auth:login' %}" class="btn btn-outline-custom">
+                Already a Member? Sign In
+            </a>
+
+        </div>
+
+        <small class="join-note">
+            Join the community, showcase your skills, and grow together.
+        </small>
+
+    {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+{% endblock %}

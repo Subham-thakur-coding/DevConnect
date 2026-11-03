@@ -1,0 +1,61 @@
+{% extends "emails/base_email.html" %}
+
+{% block email_content %}
+
+<h2 style="margin:0 0 15px; color:#111827; font-size:24px;">
+    Welcome to DevConnect, {{ username }}! 🎉
+</h2>
+
+<p style="color:#4b5563;">
+    We're excited to have you as part of our developer community.
+</p>
+
+<p style="color:#4b5563;">
+    DevConnect is a place where developers connect, share ideas,
+    collaborate on projects, and grow together.
+</p>
+
+<div style="background-color:#f5f3ff; border-left:4px solid #6366f1; padding:18px; border-radius:8px; margin:25px 0;">
+
+    <h3 style="margin:0 0 12px; color:#4f46e5;">
+        What you can do on DevConnect
+    </h3>
+
+    <p style="margin:8px 0; color:#374151;">
+        🚀 Discover developers and connect with them.
+    </p>
+
+    <p style="margin:8px 0; color:#374151;">
+        💻 Create projects and collaborate with other developers.
+    </p>
+
+    <p style="margin:8px 0; color:#374151;">
+        🤝 Build your professional developer network.
+    </p>
+
+    <p style="margin:8px 0; color:#374151;">
+        🌱 Share your skills and grow your experience.
+    </p>
+
+</div>
+
+<p style="color:#4b5563;">
+    Your journey starts here. Complete your developer profile
+    and start connecting with the community!
+</p>
+
+{% if site_url %}
+<p style="text-align:center; margin:30px 0;">
+    <a href="{{ site_url }}"
+       style="display:inline-block; padding:13px 28px; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#ffffff; text-decoration:none; border-radius:8px; font-weight:bold;">
+        Explore DevConnect
+    </a>
+</p>
+{% endif %}
+
+<p style="color:#4b5563;">
+    Happy building!<br>
+    <strong>The DevConnect Team</strong>
+</p>
+
+{% endblock %}

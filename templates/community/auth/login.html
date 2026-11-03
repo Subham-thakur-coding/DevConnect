@@ -1,0 +1,101 @@
+{% extends "community/auth/base.html" %}
+
+{% block title %}Login | NetVibe DevConnect{% endblock %}
+
+{% block auth_content %}
+<section class="auth-card">
+
+    <div class="auth-icon">
+        <i class="bi bi-box-arrow-in-right"></i>
+    </div>
+
+    <h1>Welcome back!</h1>
+
+    <p class="auth-subtitle">
+        Sign in to continue your developer journey.
+    </p>
+
+    <form method="post" action="{% url 'auth:login' %}">
+        {% csrf_token %}
+
+        <input type="hidden" name="next" value="{{ next }}">
+
+        {% if form.non_field_errors %}
+            <div class="error-box">
+                {% for error in form.non_field_errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="field-group">
+            <label for="{{ form.username.id_for_label }}" class="form-label">
+                Username
+            </label>
+
+            <input
+                type="text"
+                name="{{ form.username.html_name }}"
+                id="{{ form.username.id_for_label }}"
+                class="form-control"
+                placeholder="Enter your username"
+                autocomplete="username"
+                required
+                autofocus
+            >
+
+            {% for error in form.username.errors %}
+                <div class="text-danger small mt-2">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="field-group">
+            <label for="{{ form.password.id_for_label }}" class="form-label">
+                Password
+            </label>
+
+            <input
+                type="password"
+                name="{{ form.password.html_name }}"
+                id="{{ form.password.id_for_label }}"
+                class="form-control"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+            >
+
+            {% for error in form.password.errors %}
+                <div class="text-danger small mt-2">{{ error }}</div>
+            {% endfor %}
+
+            <!-- Forgot Password -->
+            <div class="text-end mt-2">
+                <a
+                    href="{% url 'password_reset' %}"
+                    class="small text-decoration-none fw-semibold"
+                    style="color:#6366f1;"
+                >
+                    Forgot Password?
+                    <i class="bi bi-arrow-up-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <button type="submit" class="btn auth-button">
+            Sign In
+            <i class="bi bi-arrow-right"></i>
+        </button>
+    </form>
+
+    <div class="security-note">
+        <i class="bi bi-shield-check"></i>
+        Secure sign-in powered by Django.
+    </div>
+
+    <p class="auth-switch">
+        New to DevConnect?
+        <a href="{% url 'auth:register' %}">Create an account</a>
+    </p>
+
+</section>
+{% endblock %}
